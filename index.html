@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-950">
+<html lang="en" class="h-full bg-slate-50">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuickFix | Doorstep Home Care & Instant Services</title>
+    <title>QuickFix | Doorstep Services & Partner Portal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -12,15 +12,14 @@
             theme: {
                 extend: {
                     colors: {
-                        cyber: {
-                            950: '#070a12',
-                            900: '#0b0f19',
-                            850: '#111726',
-                            800: '#172033',
-                            700: '#212d47',
-                            glow: '#06b6d4',
-                            accent: '#8b5cf6',
-                            emerald: '#10b981'
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
                         }
                     },
                     fontFamily: {
@@ -37,33 +36,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #070a12; color: #f1f5f9; }
-        .glass-card {
-            background: rgba(17, 23, 38, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #0f172a; }
+        .light-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
         }
-        .glass-card:hover {
-            border-color: rgba(6, 182, 212, 0.3);
-            box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.15);
+        .light-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 12px 28px -4px rgba(37, 99, 235, 0.12);
         }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #0b0f19; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1f293d; border-radius: 9999px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #2563eb; }
         
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 15px rgba(6, 182, 212, 0.2); }
-            50% { box-shadow: 0 0 35px rgba(139, 92, 246, 0.4); }
-        }
-        .glow-pulse { animation: pulseGlow 3s infinite ease-in-out; }
-
-        @keyframes timerRadar {
+        @keyframes radarSpin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .radar-spin { animation: timerRadar 4s linear infinite; }
+        .radar-spin { animation: radarSpin 6s linear infinite; }
 
         @keyframes typingDots {
             0%, 100% { opacity: 0.2; transform: translateY(0); }
@@ -74,560 +66,803 @@
         .dot-3 { animation: typingDots 1.4s infinite 0.5s; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-black">
+<body class="min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
 
-    <!-- TOP GUARANTEE TICKER BAR -->
-    <div class="bg-gradient-to-r from-amber-500 via-cyan-500 to-indigo-600 text-slate-950 px-4 py-1.5 text-[11px] font-black text-center uppercase tracking-widest flex items-center justify-center gap-3">
-        <span class="flex items-center gap-1"><i class="fa-solid fa-bolt animate-bounce"></i> QUICKFIX SERVICE COMMITMENT</span>
-        <span class="hidden sm:inline">•</span>
-        <span class="hidden sm:inline">VERIFIED CARE PROFESSIONALS & 60-MIN EXPRESS ON-DEMAND DISPATCH</span>
+    <!-- INITIAL ROLE SELECTOR MODAL -->
+    <div id="roleModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md">
+        <div class="bg-white max-w-2xl w-full rounded-3xl p-6 sm:p-10 space-y-8 shadow-2xl border border-slate-200">
+            <div class="text-center space-y-3">
+                <div class="w-16 h-16 rounded-2xl bg-blue-600 text-white flex items-center justify-center mx-auto text-2xl font-black shadow-lg shadow-blue-500/30">
+                    <i class="fa-solid fa-wrench"></i>
+                </div>
+                <h2 class="text-3xl font-black text-slate-900">Welcome to <span class="text-blue-600">QuickFix</span></h2>
+                <p class="text-slate-500 text-sm font-medium max-w-md mx-auto">Please select how you would like to proceed today:</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Option 1: For Customers -->
+                <div onclick="selectRole('customer')" class="light-card p-6 rounded-3xl cursor-pointer hover:border-blue-600 border-2 border-slate-200 transition text-center space-y-4 group">
+                    <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto text-2xl group-hover:bg-blue-600 group-hover:text-white transition duration-300">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="bg-blue-100 text-blue-700 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">Book Services</span>
+                        <h3 class="text-lg font-black text-slate-900 pt-1">For Customers</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">Book house maids, babysitters, caretakers, plumbing, mobile repair & express doorstep services.</p>
+                    </div>
+                    <button class="w-full py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-md group-hover:bg-blue-700 transition">Enter Customer Portal &rarr;</button>
+                </div>
+
+                <!-- Option 2: For Professionals / Vendors -->
+                <div onclick="selectRole('vendor')" class="light-card p-6 rounded-3xl cursor-pointer hover:border-emerald-600 border-2 border-slate-200 transition text-center space-y-4 group">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto text-2xl group-hover:bg-emerald-600 group-hover:text-white transition duration-300">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="bg-emerald-100 text-emerald-700 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">Earn & Work</span>
+                        <h3 class="text-lg font-black text-slate-900 pt-1">For Professionals / Vendors</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">Register as a service partner, manage daily jobs, track payouts, and verify client job OTPs.</p>
+                    </div>
+                    <button class="w-full py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-md group-hover:bg-emerald-700 transition">Partner Dashboard &rarr;</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- NAVIGATION BAR -->
-    <header class="sticky top-0 z-40 bg-cyber-950/85 backdrop-blur-xl border-b border-slate-800/80">
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-800 text-white px-4 py-2 text-xs font-bold text-center tracking-wide flex items-center justify-center gap-3 shadow-sm">
+        <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-amber-300"></i> QUICKFIX GUARANTEE:</span>
+        <span class="hidden sm:inline">VERIFIED CARE PROFESSIONALS & 60-MIN ON-DEMAND DISPATCH</span>
+        <span class="bg-amber-400 text-slate-950 text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-wider ml-1">ZERO PLATFORM FEE</span>
+    </div>
+
+    <!-- MAIN NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-18 py-3">
+            <div class="flex items-center justify-between h-20">
                 
                 <!-- Brand Logo -->
-                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('services')">
-                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
-                        <i class="fa-solid fa-bolt-lightning text-xl text-cyan-200"></i>
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchRole('customer')">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/25">
+                        <i class="fa-solid fa-wrench text-xl"></i>
                     </div>
                     <div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="text-xl font-extrabold tracking-tight text-white">Quick<span class="text-cyan-400">Fix</span></span>
-                            <span class="bg-cyan-500/20 text-cyan-300 text-[9px] font-black px-1.5 py-0.5 rounded border border-cyan-500/40">VERIFIED CARE</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl font-extrabold tracking-tight text-slate-900">Quick<span class="text-blue-600">Fix</span></span>
+                            <span id="activeRoleBadge" class="bg-blue-50 text-blue-700 text-[10px] font-black px-2 py-0.5 rounded-full border border-blue-200">FOR CUSTOMERS</span>
                         </div>
-                        <span class="block text-[9px] text-slate-400 font-bold -mt-1 tracking-widest uppercase">Doorstep Home Services</span>
+                        <span class="block text-[10px] text-slate-500 font-bold tracking-widest uppercase -mt-1">Home & Auto Services</span>
                     </div>
                 </div>
 
-                <!-- Express Live Delivery Counter Badge -->
-                <div class="hidden md:flex items-center gap-2.5 bg-cyber-850 border border-cyan-500/30 px-3.5 py-1.5 rounded-2xl text-xs font-bold text-slate-200">
+                <!-- Express Delivery Live Display -->
+                <div id="expressLiveNavDisplay" class="hidden lg:flex items-center gap-3 bg-slate-100/80 border border-slate-200 px-4 py-2 rounded-2xl text-xs font-semibold text-slate-700">
                     <div class="relative w-2.5 h-2.5">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-600"></span>
                     </div>
-                    <span>Express Dispatch Target: <span id="navEtaDisplay" class="text-cyan-400 font-extrabold">--:--</span></span>
+                    <span>Express Dispatch Target: <span id="navEtaDisplay" class="text-blue-600 font-extrabold">--:--</span></span>
                 </div>
 
-                <!-- Nav Action Buttons -->
+                <!-- Navigation Action Links & Role Switcher -->
                 <div class="flex items-center gap-2 sm:gap-3">
-                    <nav class="flex items-center gap-1">
-                        <button onclick="switchTab('services')" id="nav-services" class="nav-btn text-xs font-bold px-3 py-2 rounded-xl text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-shapes"></i>
+                    
+                    <!-- ROLE TOGGLE SWITCHER BUTTON -->
+                    <div class="bg-slate-100 p-1 rounded-2xl border border-slate-200 flex items-center">
+                        <button id="btnRoleCustomer" onclick="switchRole('customer')" class="px-3 py-1.5 rounded-xl text-xs font-black transition bg-blue-600 text-white shadow-xs">
+                            <i class="fa-solid fa-user text-[10px] mr-1"></i> Customer
+                        </button>
+                        <button id="btnRoleVendor" onclick="switchRole('vendor')" class="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition">
+                            <i class="fa-solid fa-briefcase text-[10px] mr-1"></i> Partner
+                        </button>
+                    </div>
+
+                    <!-- CUSTOMER NAVIGATION -->
+                    <nav id="customerNav" class="flex items-center gap-1.5">
+                        <button onclick="switchTab('services')" id="nav-services" class="nav-btn text-xs font-extrabold px-3.5 py-2.5 rounded-xl text-blue-600 bg-blue-50 border border-blue-200 transition flex items-center gap-2">
+                            <i class="fa-solid fa-border-all"></i>
                             <span class="hidden sm:inline">Explore</span> Services
                         </button>
-                        <button onclick="switchTab('bookings')" id="nav-bookings" class="nav-btn text-xs font-semibold px-3 py-2 rounded-xl text-slate-300 hover:bg-cyber-850 transition relative flex items-center gap-1.5">
-                            <i class="fa-solid fa-calendar-check text-indigo-400"></i>
+                        <button onclick="switchTab('bookings')" id="nav-bookings" class="nav-btn text-xs font-bold px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 transition relative flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-check text-indigo-600"></i>
                             <span class="hidden sm:inline">My</span> Bookings
-                            <span id="bookingBadge" class="hidden absolute -top-1 -right-1 bg-cyan-500 text-black text-[10px] w-4 h-4 rounded-full items-center justify-center font-extrabold">0</span>
+                            <span id="bookingBadge" class="hidden absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] w-4 h-4 rounded-full items-center justify-center font-black">0</span>
                         </button>
-                        <button onclick="switchTab('help')" id="nav-help" class="nav-btn text-xs font-semibold px-3 py-2 rounded-xl text-slate-300 hover:bg-cyber-850 transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-headset text-violet-400"></i>
+                        <button onclick="switchTab('help')" id="nav-help" class="nav-btn text-xs font-bold px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 transition flex items-center gap-2">
+                            <i class="fa-solid fa-headset text-indigo-500"></i>
                             <span>AI Support</span>
                         </button>
                     </nav>
 
                     <!-- Cart Trigger Button -->
-                    <button onclick="openCartDrawer()" class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-cyber-850 hover:bg-cyber-800 text-slate-200 border border-slate-800 transition shadow-inner">
-                        <i class="fa-solid fa-cart-shopping text-cyan-400 text-sm"></i>
-                        <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-violet-600 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-cyber-950">0</span>
+                    <button id="cartTriggerBtn" onclick="openCartDrawer()" class="relative flex items-center justify-center w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition shadow-xs">
+                        <i class="fa-solid fa-cart-shopping text-blue-600 text-base"></i>
+                        <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-indigo-600 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm">0</span>
                     </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- MAIN WRAPPER -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- MAIN APP CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        <!-- TAB 1: SERVICES DIRECTORY -->
-        <div id="tab-services" class="space-y-8">
-            
-            <!-- HERO BANNER -->
-            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-cyber-850 via-cyber-900 to-cyber-950 border border-cyan-500/30 p-6 sm:p-10 shadow-2xl glow-pulse">
-                <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                    
-                    <div class="lg:col-span-8 space-y-4">
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
-                                <i class="fa-solid fa-shield-halved text-amber-400"></i> VERIFIED & BACKGROUND CHECKED
-                            </span>
-                            <!-- HIGH CONTRAST TAGLINE BADGE -->
-                            <span class="inline-flex items-center gap-1 bg-amber-400 text-slate-950 px-3.5 py-1 rounded-xl text-xs font-black shadow-lg border border-amber-300 tracking-tight">
-                                <i class="fa-solid fa-stopwatch"></i> Booked in Seconds
-                            </span>
-                        </div>
+        <!-- ========================================== -->
+        <!-- SECTION 1: FOR CUSTOMERS PORTAL            -->
+        <!-- ========================================== -->
+        <div id="portal-customer" class="space-y-10">
 
-                        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-                            Trusted Home Care & <br>
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-amber-300 to-violet-400">Instant Doorstep Services</span>
-                        </h1>
-                        <p class="text-slate-300 text-xs sm:text-sm max-w-xl leading-relaxed">
-                            Subscribe to dedicated house maids, child sitters, and patient caretakers with flexible start dates, or get 60-min express dispatch for plumbing, repairs, cleaning, and car wash!
-                        </p>
-
-                        <!-- Search Bar -->
-                        <div class="pt-2 flex items-center max-w-lg bg-cyber-950/90 rounded-2xl p-2 border border-cyan-500/30 focus-within:ring-2 focus-within:ring-cyan-500 transition shadow-inner">
-                            <i class="fa-solid fa-magnifying-glass text-cyan-400 pl-3"></i>
-                            <input type="text" id="searchInput" onkeyup="filterServices()" placeholder="Search house maid, baby sitter, patient caretaker, plumbing, car wash..." class="w-full bg-transparent border-none text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none px-3 py-1">
-                        </div>
-                    </div>
-
-                    <!-- Hero Widget -->
-                    <div class="lg:col-span-4 bg-cyber-950/80 p-5 rounded-3xl border border-slate-800 text-center space-y-3 relative overflow-hidden">
-                        <div class="w-20 h-20 mx-auto relative flex items-center justify-center">
-                            <div class="absolute inset-0 rounded-full border-2 border-dashed border-cyan-500/50 radar-spin"></div>
-                            <div class="w-14 h-14 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl font-black border border-cyan-500/40">
-                                <i class="fa-solid fa-hand-holding-heart"></i>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-widest block">EXPRESS DISPATCH TARGET</span>
-                            <span id="heroTargetTime" class="text-2xl font-black text-cyan-400">By --:-- PM</span>
-                            <p class="text-[11px] text-slate-300 mt-0.5">Verified specialists ready in your neighborhood</p>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Background Blurs -->
-                <div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none"></div>
-                <div class="absolute right-10 bottom-0 w-64 h-64 rounded-full bg-violet-600/10 blur-3xl pointer-events-none"></div>
-            </div>
-
-            <!-- ESSENTIAL CARE FEATURED HIGHLIGHT CAROUSEL -->
-            <div class="space-y-3">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-sm font-black uppercase tracking-wider text-cyan-400 flex items-center gap-2">
-                        <i class="fa-solid fa-heart text-rose-400"></i> Top Care & Subscription Services
-                    </h3>
-                    <span class="text-[11px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
-                        📅 Scheduled Start & Interview
-                    </span>
-                </div>
+            <!-- TAB 1: SERVICES DIRECTORY -->
+            <div id="tab-services" class="space-y-10">
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Maid Quick Card -->
-                    <div onclick="filterCategory('maid')" class="glass-card p-4 rounded-2xl cursor-pointer hover:border-cyan-400/50 transition flex items-center gap-3 group border border-cyan-500/20">
-                        <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0 border border-cyan-500/30 group-hover:scale-105 transition">
-                            <i class="fa-solid fa-broom text-xl"></i>
-                        </div>
-                        <div>
-                            <span class="text-[10px] font-black text-amber-400 uppercase tracking-widest block">📅 FLEXIBLE START DATE</span>
-                            <h4 class="font-bold text-white text-sm">House Maid (Subscription)</h4>
-                            <p class="text-[11px] text-slate-400">Part-Time & Full-Time Daily Help</p>
-                        </div>
-                    </div>
-
-                    <!-- Babysitter Quick Card -->
-                    <div onclick="filterCategory('babysitter')" class="glass-card p-4 rounded-2xl cursor-pointer hover:border-violet-400/50 transition flex items-center gap-3 group border border-violet-500/20">
-                        <div class="w-12 h-12 rounded-2xl bg-violet-500/10 text-violet-400 flex items-center justify-center shrink-0 border border-violet-500/30 group-hover:scale-105 transition">
-                            <i class="fa-solid fa-baby text-xl"></i>
-                        </div>
-                        <div>
-                            <span class="text-[10px] font-black text-violet-400 uppercase tracking-widest block">📅 SCHEDULED ASSESSMENT</span>
-                            <h4 class="font-bold text-white text-sm">Baby Sitter (Subscription)</h4>
-                            <p class="text-[11px] text-slate-400">Verified Child Care Specialist</p>
-                        </div>
-                    </div>
-
-                    <!-- Caretaker Quick Card -->
-                    <div onclick="filterCategory('caretaker')" class="glass-card p-4 rounded-2xl cursor-pointer hover:border-emerald-400/50 transition flex items-center gap-3 group border border-emerald-500/20">
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30 group-hover:scale-105 transition">
-                            <i class="fa-solid fa-user-nurse text-xl"></i>
-                        </div>
-                        <div>
-                            <span class="text-[10px] font-black text-emerald-400 uppercase tracking-widest block">📅 SHIFT & LIVE-IN CARE</span>
-                            <h4 class="font-bold text-white text-sm">Patient Caretaker</h4>
-                            <p class="text-[11px] text-slate-400">Dedicated Elderly & Patient Care</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Categories Chips Filter (Care Options TOP Priority) -->
-            <div class="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
-                <button onclick="filterCategory('all')" class="cat-chip active px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 transition">
-                    All Services
-                </button>
-                <button onclick="filterCategory('maid')" class="cat-chip px-4 py-2.5 rounded-2xl text-xs font-semibold whitespace-nowrap bg-cyber-850 text-slate-300 hover:bg-cyber-800 border border-slate-800 transition">
-                    <i class="fa-solid fa-broom text-cyan-400 mr-1.5"></i>1. House Maid (Subscription)
-                </button>
-                <button onclick="filterCategory('babysitter')" class="cat-chip px-4 py-2.5 rounded-2xl text-xs font-semibold whitespace-nowrap bg-cyber-850 text-slate-300 hover:bg-cyber-800 border border-slate-800 transition">
-                    <i class="fa-solid fa-baby text-violet-400 mr-1.5"></i>2. Baby Sitter (Subscription)
-                </button>
-                <button onclick="filterCategory('caretaker')" class="cat-chip px-4 py-2.5 rounded-2xl text-xs font-semibold whitespace-nowrap bg-cyber-850 text-slate-300 hover:bg-cyber-800 border border-slate-800 transition">
-                    <i class="fa-solid fa-user-nurse text-emerald-400 mr-1.5"></i>3. Patient Caretaker
-                </button>
-                <button onclick="filterCategory('auto')" class="cat-chip px-4 py-2.5 rounded-2xl text-xs font-semibold whitespace-nowrap bg-cyber-850 text-slate-300 hover:bg-cyber-800 border border-slate-800 transition">
-                    <i class="fa-solid fa-car text-blue-400 mr-1.5"></i>Car & Bike Wash
-                </button>
-                <button onclick="filterCategory('tech')" class="cat-chip px-4 py-2.5 rounded-2xl text-xs font-semibold whitespace-nowrap bg-cyber-850 text-slate-300 hover:bg-cyber-800 border border-slate-800 transition">
-                    <i class="fa-solid fa-mobile-screen-button text-amber-400 mr-1.5"></i>Mobile Repair
-                </button>
-                <button onclick="filterCategory('plumbing')" class="cat-chip px-4 py-2.5 rounded-2xl text-xs font-semibold whitespace-nowrap bg-cyber-850 text-slate-300 hover:bg-cyber-800 border border-slate-800 transition">
-                    <i class="fa-solid fa-faucet-drip text-rose-400 mr-1.5"></i>Plumbing
-                </button>
-                <button onclick="filterCategory('cleaning')" class="cat-chip px-4 py-2.5 rounded-2xl text-xs font-semibold whitespace-nowrap bg-cyber-850 text-slate-300 hover:bg-cyber-800 border border-slate-800 transition">
-                    <i class="fa-solid fa-sparkles text-teal-400 mr-1.5"></i>Home & Deep Cleaning
-                </button>
-                <button onclick="filterCategory('appliances')" class="cat-chip px-4 py-2.5 rounded-2xl text-xs font-semibold whitespace-nowrap bg-cyber-850 text-slate-300 hover:bg-cyber-800 border border-slate-800 transition">
-                    <i class="fa-solid fa-plug text-yellow-400 mr-1.5"></i>Electronic Repair
-                </button>
-            </div>
-
-            <!-- Services Grid -->
-            <div id="servicesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Dynamically Populated via JS -->
-            </div>
-        </div>
-
-        <!-- TAB 2: MY BOOKINGS & TRACKER -->
-        <div id="tab-bookings" class="hidden space-y-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h2 class="text-2xl font-black text-white flex items-center gap-2">
-                        <span>My Bookings & Service Status Tracker</span>
-                        <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
-                    </h2>
-                    <p class="text-xs text-slate-400">Track assigned specialist, job OTP, and schedule details</p>
-                </div>
-                <button onclick="switchTab('services')" class="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
-                    <i class="fa-solid fa-circle-plus"></i> Book Another Service
-                </button>
-            </div>
-
-            <!-- List Container -->
-            <div id="bookingsList" class="space-y-4">
-                <!-- Populated via JS -->
-            </div>
-        </div>
-
-        <!-- TAB 3: AI SUPPORT HUB -->
-        <div id="tab-help" class="hidden space-y-6">
-            
-            <!-- Support Header -->
-            <div class="bg-gradient-to-r from-cyber-850 via-cyber-900 to-cyber-850 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="space-y-2 text-center md:text-left">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 text-violet-300 text-xs font-bold border border-violet-500/30">
-                        <i class="fa-solid fa-microchip text-cyan-400"></i> QuickFix Intelligent Support AI
-                    </span>
-                    <h2 class="text-2xl sm:text-3xl font-black text-white">Smart Resolution & Support Desk</h2>
-                    <p class="text-slate-400 text-xs sm:text-sm max-w-lg">
-                        Manage subscription replacements, check service arrival, or raise payment refund claims.
-                    </p>
-                </div>
-
-                <!-- Support SLA Badge -->
-                <div class="flex items-center gap-3 shrink-0">
-                    <div class="bg-cyber-950 p-3.5 rounded-2xl border border-slate-800 text-center">
-                        <span class="block text-xl font-black text-cyan-400">100%</span>
-                        <span class="text-[9px] text-slate-400 uppercase font-bold tracking-wider">Verified Care</span>
-                    </div>
-                    <div class="bg-cyber-950 p-3.5 rounded-2xl border border-slate-800 text-center">
-                        <span class="block text-xl font-black text-emerald-400">Instant</span>
-                        <span class="text-[9px] text-slate-400 uppercase font-bold tracking-wider">AI Resolution</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                
-                <!-- Left Column: Topic Shortcuts & Official Contact -->
-                <div class="lg:col-span-5 space-y-4">
-                    
-                    <!-- Booking Context Selector -->
-                    <div class="glass-card p-4 rounded-2xl">
-                        <label class="block text-[11px] font-bold text-cyan-400 uppercase tracking-wider mb-2">
-                            <i class="fa-solid fa-link mr-1"></i> Attach Active Booking
-                        </label>
-                        <select id="supportOrderSelect" onchange="attachOrderToChat()" class="w-full text-xs font-medium bg-cyber-950 border border-slate-800 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                            <option value="">General Support Query (No booking selected)</option>
-                            <!-- Dynamically filled -->
-                        </select>
-                    </div>
-
-                    <!-- Category Action Buttons -->
-                    <div class="glass-card rounded-3xl overflow-hidden divide-y divide-slate-800/80">
-                        <button onclick="startAiTopic('technician_gps')" class="w-full p-4 text-left hover:bg-cyber-800/50 transition flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
-                                    <i class="fa-solid fa-clock"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-xs font-bold text-white">Track Service Partner Arrival</h4>
-                                    <p class="text-[11px] text-slate-400">Check schedule & contact assigned professional</p>
-                                </div>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-slate-600 group-hover:text-cyan-400 transition"></i>
-                        </button>
-
-                        <button onclick="startAiTopic('instant_refund')" class="w-full p-4 text-left hover:bg-cyber-800/50 transition flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
-                                    <i class="fa-solid fa-indian-rupee-sign"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-xs font-bold text-white">UPI Payment & Instant Refund</h4>
-                                    <p class="text-[11px] text-slate-400">Payment status or subscription cancellation</p>
-                                </div>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-slate-600 group-hover:text-emerald-400 transition"></i>
-                        </button>
-
-                        <button onclick="startAiTopic('service_quality')" class="w-full p-4 text-left hover:bg-cyber-800/50 transition flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center shrink-0">
-                                    <i class="fa-solid fa-user-gear"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-xs font-bold text-white">Staff / Caregiver Replacement</h4>
-                                    <p class="text-[11px] text-slate-400">Request maid, sitter or caretaker replacement</p>
-                                </div>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-slate-600 group-hover:text-rose-400 transition"></i>
-                        </button>
-                    </div>
-
-                    <!-- Official Contact Information -->
-                    <div class="bg-cyber-950 p-5 rounded-3xl border border-slate-800 space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
-                            <span class="text-xs font-black uppercase tracking-wider text-cyan-400">QuickFix Official Helpdesk</span>
-                            <span class="bg-cyan-500/10 text-cyan-300 text-[10px] font-bold px-2 py-0.5 rounded border border-cyan-500/20">24/7 Desk</span>
-                        </div>
-
-                        <div class="space-y-3 text-xs">
-                            <div class="flex items-start gap-3">
-                                <div class="w-7 h-7 rounded-lg bg-cyber-850 flex items-center justify-center shrink-0 text-cyan-400 border border-slate-800">
-                                    <i class="fa-solid fa-envelope"></i>
-                                </div>
-                                <div>
-                                    <span class="block text-[10px] text-slate-400 font-semibold">EMAIL SUPPORT</span>
-                                    <a href="mailto:support@quickfix.in" class="font-bold text-white hover:underline">support@quickfix.in</a>
-                                </div>
+                <!-- HERO BANNER -->
+                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900 p-8 sm:p-12 text-white shadow-2xl">
+                    <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        
+                        <div class="lg:col-span-8 space-y-5">
+                            <div class="flex flex-wrap items-center gap-2.5">
+                                <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-blue-500/20 text-blue-200 border border-blue-400/30">
+                                    <i class="fa-solid fa-shield-halved text-amber-400"></i> BACKGROUND CHECKED PROFESSIONALS
+                                </span>
+                                <!-- HIGH CONTRAST TAGLINE BADGE -->
+                                <span class="inline-flex items-center gap-1.5 bg-amber-400 text-slate-950 px-4 py-1 rounded-xl text-xs font-black shadow-lg border border-amber-300">
+                                    <i class="fa-solid fa-bolt"></i> Booked in Seconds
+                                </span>
                             </div>
 
-                            <div class="flex items-start gap-3">
-                                <div class="w-7 h-7 rounded-lg bg-cyber-850 flex items-center justify-center shrink-0 text-emerald-400 border border-slate-800">
-                                    <i class="fa-solid fa-phone-volume"></i>
-                                </div>
-                                <div>
-                                    <span class="block text-[10px] text-slate-400 font-semibold">TOLL FREE PHONE</span>
-                                    <span class="font-bold text-white">1800-202-7842</span>
-                                </div>
-                            </div>
+                            <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+                                Trusted Home Care & <br>
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-cyan-200 to-amber-300">Instant Doorstep Services</span>
+                            </h1>
+                            <p class="text-slate-200 text-sm sm:text-base max-w-2xl leading-relaxed">
+                                Subscribe to dedicated house maids, child sitters, and patient caretakers with flexible start dates, or get 60-min express dispatch for plumbing, repairs, cleaning, and car wash!
+                            </p>
 
-                            <div class="flex items-start gap-3">
-                                <div class="w-7 h-7 rounded-lg bg-cyber-850 flex items-center justify-center shrink-0 text-violet-400 border border-slate-800">
-                                    <i class="fa-solid fa-building"></i>
-                                </div>
-                                <div>
-                                    <span class="block text-[10px] text-slate-400 font-semibold">HEAD OFFICE</span>
-                                    <p class="font-medium text-slate-300">QuickFix Tech Park, SG Highway, Ahmedabad, GJ - 380054</p>
-                                </div>
+                            <!-- Search Bar -->
+                            <div class="pt-2 flex items-center max-w-xl bg-white rounded-2xl p-2 shadow-2xl border border-slate-200 focus-within:ring-2 focus-within:ring-blue-500 transition">
+                                <i class="fa-solid fa-magnifying-glass text-blue-600 pl-3"></i>
+                                <input type="text" id="searchInput" onkeyup="filterServices()" placeholder="Search house maid, baby sitter, patient caretaker, plumbing, car wash..." class="w-full bg-transparent border-none text-slate-900 placeholder-slate-400 text-sm font-medium focus:outline-none px-3 py-1.5">
                             </div>
                         </div>
-                    </div>
 
-                </div>
-
-                <!-- Right Column: Interactive AI Console -->
-                <div class="lg:col-span-7 flex flex-col glass-card rounded-3xl h-[620px] overflow-hidden border border-slate-800">
-                    
-                    <!-- Chat Console Header -->
-                    <div class="p-4 bg-cyber-950 flex items-center justify-between border-b border-slate-800">
-                        <div class="flex items-center gap-3">
-                            <div class="relative">
-                                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 to-violet-600 flex items-center justify-center text-white text-lg font-black shadow-md">
-                                    <i class="fa-solid fa-robot"></i>
+                        <!-- Hero Target Timer Widget -->
+                        <div class="lg:col-span-4 bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/10 text-center space-y-4">
+                            <div class="w-20 h-20 mx-auto relative flex items-center justify-center">
+                                <div class="absolute inset-0 rounded-full border-2 border-dashed border-blue-400/60 radar-spin"></div>
+                                <div class="w-14 h-14 rounded-full bg-blue-600 text-white flex items-center justify-center text-xl font-black shadow-lg">
+                                    <i class="fa-solid fa-hand-holding-heart"></i>
                                 </div>
-                                <span class="absolute bottom-0 right-0 w-3 h-3 bg-cyan-400 border-2 border-cyber-950 rounded-full"></span>
                             </div>
                             <div>
-                                <h3 class="text-sm font-extrabold text-white flex items-center gap-2">
-                                    QuickFix AI Assistant
-                                    <span class="bg-cyan-500/20 text-cyan-300 text-[9px] font-bold px-1.5 py-0.5 rounded border border-cyan-500/30">v3.5 Smart Bot</span>
-                                </h3>
-                                <p class="text-[11px] text-slate-400">Instant answers for bookings & subscription care</p>
+                                <span class="text-[10px] uppercase font-bold text-blue-200 tracking-widest block">EXPRESS DISPATCH TARGET</span>
+                                <span id="heroTargetTime" class="text-3xl font-black text-amber-300">By --:-- PM</span>
+                                <p class="text-xs text-slate-200 mt-1 font-medium">Verified specialists ready in your neighborhood</p>
                             </div>
                         </div>
 
-                        <button onclick="resetAiChat()" class="text-xs bg-cyber-850 hover:bg-cyber-800 px-3 py-1.5 rounded-xl text-slate-300 transition border border-slate-800">
-                            <i class="fa-solid fa-arrows-rotate mr-1"></i>Reset
-                        </button>
                     </div>
 
-                    <!-- Chat Messages Scroll Container -->
-                    <div id="chatBox" class="flex-1 p-4 overflow-y-auto space-y-4 bg-cyber-900/60 custom-scrollbar">
-                        <div class="flex items-start gap-2.5 max-w-[85%]">
-                            <div class="w-7 h-7 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0 text-xs mt-0.5 border border-cyan-500/30">
+                    <!-- Subtle Light Glow Accents -->
+                    <div class="absolute -right-20 -top-20 w-96 h-96 rounded-full bg-blue-500/20 blur-3xl pointer-events-none"></div>
+                </div>
+
+                <!-- ESSENTIAL CARE TOP SPOTLIGHT CAROUSEL -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-heart text-rose-500"></i> Top Care & Subscription Services
+                        </h3>
+                        <span class="text-xs font-extrabold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">
+                            📅 Scheduled Start & Interview
+                        </span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <!-- Maid Quick Card -->
+                        <div onclick="filterCategory('maid')" class="light-card p-5 rounded-3xl cursor-pointer hover:border-blue-500 transition flex items-center gap-4 group border border-slate-200">
+                            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100 group-hover:bg-blue-600 group-hover:text-white transition duration-300 shadow-xs">
+                                <i class="fa-solid fa-broom text-2xl"></i>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest block">📅 FLEXIBLE START DATE</span>
+                                <h4 class="font-extrabold text-slate-900 text-base">House Maid (Subscription)</h4>
+                                <p class="text-xs text-slate-500">Part-Time & Full-Time Daily Help</p>
+                            </div>
+                        </div>
+
+                        <!-- Babysitter Quick Card -->
+                        <div onclick="filterCategory('babysitter')" class="light-card p-5 rounded-3xl cursor-pointer hover:border-indigo-500 transition flex items-center gap-4 group border border-slate-200">
+                            <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-100 group-hover:bg-indigo-600 group-hover:text-white transition duration-300 shadow-xs">
+                                <i class="fa-solid fa-baby text-2xl"></i>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-black text-indigo-600 uppercase tracking-widest block">📅 SCHEDULED ASSESSMENT</span>
+                                <h4 class="font-extrabold text-slate-900 text-base">Baby Sitter (Subscription)</h4>
+                                <p class="text-xs text-slate-500">Verified Child Care Specialist</p>
+                            </div>
+                        </div>
+
+                        <!-- Caretaker Quick Card -->
+                        <div onclick="filterCategory('caretaker')" class="light-card p-5 rounded-3xl cursor-pointer hover:border-emerald-500 transition flex items-center gap-4 group border border-slate-200">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100 group-hover:bg-emerald-600 group-hover:text-white transition duration-300 shadow-xs">
+                                <i class="fa-solid fa-user-nurse text-2xl"></i>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-black text-emerald-600 uppercase tracking-widest block">📅 SHIFT & LIVE-IN CARE</span>
+                                <h4 class="font-extrabold text-slate-900 text-base">Patient Caretaker</h4>
+                                <p class="text-xs text-slate-500">Dedicated Elderly & Patient Care</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories Filter Chips Bar (CARE SERVICES TOP PRIORITY) -->
+                <div class="flex items-center gap-2.5 overflow-x-auto pb-2 custom-scrollbar">
+                    <button onclick="filterCategory('all')" class="cat-chip active px-5 py-3 rounded-2xl text-xs font-black whitespace-nowrap bg-blue-600 text-white shadow-md shadow-blue-500/20 transition">
+                        All Services
+                    </button>
+                    <button onclick="filterCategory('maid')" class="cat-chip px-5 py-3 rounded-2xl text-xs font-bold whitespace-nowrap bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition">
+                        <i class="fa-solid fa-broom text-blue-600 mr-2"></i>1. House Maid (Subscription)
+                    </button>
+                    <button onclick="filterCategory('babysitter')" class="cat-chip px-5 py-3 rounded-2xl text-xs font-bold whitespace-nowrap bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition">
+                        <i class="fa-solid fa-baby text-indigo-600 mr-2"></i>2. Baby Sitter (Subscription)
+                    </button>
+                    <button onclick="filterCategory('caretaker')" class="cat-chip px-5 py-3 rounded-2xl text-xs font-bold whitespace-nowrap bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition">
+                        <i class="fa-solid fa-user-nurse text-emerald-600 mr-2"></i>3. Patient Caretaker
+                    </button>
+                    <button onclick="filterCategory('auto')" class="cat-chip px-5 py-3 rounded-2xl text-xs font-bold whitespace-nowrap bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition">
+                        <i class="fa-solid fa-car text-sky-600 mr-2"></i>Car & Bike Wash
+                    </button>
+                    <button onclick="filterCategory('tech')" class="cat-chip px-5 py-3 rounded-2xl text-xs font-bold whitespace-nowrap bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition">
+                        <i class="fa-solid fa-mobile-screen-button text-amber-600 mr-2"></i>Mobile Repair
+                    </button>
+                    <button onclick="filterCategory('plumbing')" class="cat-chip px-5 py-3 rounded-2xl text-xs font-bold whitespace-nowrap bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition">
+                        <i class="fa-solid fa-faucet-drip text-rose-600 mr-2"></i>Plumbing
+                    </button>
+                    <button onclick="filterCategory('cleaning')" class="cat-chip px-5 py-3 rounded-2xl text-xs font-bold whitespace-nowrap bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition">
+                        <i class="fa-solid fa-sparkles text-teal-600 mr-2"></i>Home & Deep Cleaning
+                    </button>
+                    <button onclick="filterCategory('appliances')" class="cat-chip px-5 py-3 rounded-2xl text-xs font-bold whitespace-nowrap bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition">
+                        <i class="fa-solid fa-plug text-purple-600 mr-2"></i>Electronic Repair
+                    </button>
+                </div>
+
+                <!-- Services Dynamic Grid -->
+                <div id="servicesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+
+            <!-- TAB 2: MY BOOKINGS & TRACKER -->
+            <div id="tab-bookings" class="hidden space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2">
+                            <span>My Bookings & Service Status Tracker</span>
+                            <span class="w-3 h-3 rounded-full bg-blue-600 animate-ping"></span>
+                        </h2>
+                        <p class="text-xs text-slate-500 font-medium">Track assigned specialist, start OTP, and schedule details</p>
+                    </div>
+                    <button onclick="switchTab('services')" class="text-xs font-extrabold text-blue-600 hover:text-blue-800 flex items-center gap-1.5 bg-blue-50 px-3 py-2 rounded-xl border border-blue-200">
+                        <i class="fa-solid fa-circle-plus"></i> Book Another Service
+                    </button>
+                </div>
+
+                <!-- List Container -->
+                <div id="bookingsList" class="space-y-5">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+
+            <!-- TAB 3: AI SUPPORT HUB -->
+            <div id="tab-help" class="hidden space-y-8">
+                
+                <!-- Support Banner Header -->
+                <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 rounded-3xl p-8 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="space-y-2 text-center md:text-left">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-200 text-xs font-bold border border-blue-400/30">
+                            <i class="fa-solid fa-microchip text-blue-300"></i> QuickFix Intelligent Support AI
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-black">Smart Resolution & Help Desk</h2>
+                        <p class="text-slate-300 text-xs sm:text-sm max-w-xl">
+                            Manage caregiver replacements, track technician arrival, or raise instant payment refund claims.
+                        </p>
+                    </div>
+
+                    <!-- Support SLA Badge -->
+                    <div class="flex items-center gap-3 shrink-0">
+                        <div class="bg-white/10 p-4 rounded-2xl border border-white/10 text-center">
+                            <span class="block text-2xl font-black text-amber-300">100%</span>
+                            <span class="text-[9px] text-slate-300 uppercase font-bold tracking-wider">Verified Care</span>
+                        </div>
+                        <div class="bg-white/10 p-4 rounded-2xl border border-white/10 text-center">
+                            <span class="block text-2xl font-black text-emerald-400">Instant</span>
+                            <span class="text-[9px] text-slate-300 uppercase font-bold tracking-wider">AI Resolution</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <!-- Left Column: Topic Shortcuts & Contact -->
+                    <div class="lg:col-span-5 space-y-5">
+                        
+                        <!-- Booking Context Selector -->
+                        <div class="light-card p-5 rounded-3xl space-y-2">
+                            <label class="block text-xs font-extrabold text-blue-600 uppercase tracking-wider">
+                                <i class="fa-solid fa-link mr-1"></i> Attach Active Booking
+                            </label>
+                            <select id="supportOrderSelect" onchange="attachOrderToChat()" class="w-full text-xs font-medium bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                <option value="">General Support Query (No booking selected)</option>
+                                <!-- Dynamically filled -->
+                            </select>
+                        </div>
+
+                        <!-- Category Action Buttons -->
+                        <div class="light-card rounded-3xl overflow-hidden divide-y divide-slate-100">
+                            <button onclick="startAiTopic('technician_gps')" class="w-full p-4 text-left hover:bg-slate-50 transition flex items-center justify-between group">
+                                <div class="flex items-center gap-3.5">
+                                    <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
+                                        <i class="fa-solid fa-clock"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xs font-bold text-slate-900">Track Professional Arrival</h4>
+                                        <p class="text-[11px] text-slate-500">Check schedule & contact assigned staff</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-blue-600 transition"></i>
+                            </button>
+
+                            <button onclick="startAiTopic('instant_refund')" class="w-full p-4 text-left hover:bg-slate-50 transition flex items-center justify-between group">
+                                <div class="flex items-center gap-3.5">
+                                    <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+                                        <i class="fa-solid fa-indian-rupee-sign"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xs font-bold text-slate-900">UPI Payment & Instant Refund</h4>
+                                        <p class="text-[11px] text-slate-500">Payment status or plan cancellation</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-emerald-600 transition"></i>
+                            </button>
+
+                            <button onclick="startAiTopic('service_quality')" class="w-full p-4 text-left hover:bg-slate-50 transition flex items-center justify-between group">
+                                <div class="flex items-center gap-3.5">
+                                    <div class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 border border-rose-100">
+                                        <i class="fa-solid fa-user-gear"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xs font-bold text-slate-900">Staff / Caregiver Replacement</h4>
+                                        <p class="text-[11px] text-slate-500">Request maid, sitter or caretaker replacement</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-rose-600 transition"></i>
+                            </button>
+                        </div>
+
+                        <!-- Official Contact Information -->
+                        <div class="light-card p-6 rounded-3xl space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                <span class="text-xs font-black uppercase tracking-wider text-blue-600">QuickFix Official Helpdesk</span>
+                                <span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-blue-200">24/7 Support</span>
+                            </div>
+
+                            <div class="space-y-3.5 text-xs">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 text-blue-600 border border-blue-100">
+                                        <i class="fa-solid fa-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <span class="block text-[10px] text-slate-400 font-semibold uppercase">EMAIL SUPPORT</span>
+                                        <a href="mailto:support@quickfix.in" class="font-bold text-slate-900 hover:text-blue-600">support@quickfix.in</a>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 text-emerald-600 border border-emerald-100">
+                                        <i class="fa-solid fa-phone-volume"></i>
+                                    </div>
+                                    <div>
+                                        <span class="block text-[10px] text-slate-400 font-semibold uppercase">TOLL FREE PHONE</span>
+                                        <span class="font-bold text-slate-900">1800-202-7842</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0 text-indigo-600 border border-indigo-100">
+                                        <i class="fa-solid fa-building"></i>
+                                    </div>
+                                    <div>
+                                        <span class="block text-[10px] text-slate-400 font-semibold uppercase">HEAD OFFICE</span>
+                                        <p class="font-medium text-slate-600">QuickFix Tech Park, SG Highway, Ahmedabad, GJ - 380054</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column: Interactive AI Console -->
+                    <div class="lg:col-span-7 flex flex-col light-card rounded-3xl h-[620px] overflow-hidden">
+                        
+                        <!-- Console Header -->
+                        <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="relative">
+                                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white text-lg font-black shadow-md">
+                                        <i class="fa-solid fa-robot"></i>
+                                    </div>
+                                    <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-slate-900 rounded-full"></span>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-extrabold text-white flex items-center gap-2">
+                                        QuickFix AI Assistant
+                                        <span class="bg-blue-500/20 text-blue-200 text-[9px] font-bold px-2 py-0.5 rounded border border-blue-400/30">v3.5 Bot</span>
+                                    </h3>
+                                    <p class="text-[11px] text-slate-300">Instant answers for care subscriptions & repair slots</p>
+                                </div>
+                            </div>
+
+                            <button onclick="resetAiChat()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl transition border border-slate-700">
+                                <i class="fa-solid fa-arrows-rotate mr-1"></i>Reset
+                            </button>
+                        </div>
+
+                        <!-- Messages Scroll Box -->
+                        <div id="chatBox" class="flex-1 p-5 overflow-y-auto space-y-4 bg-slate-50/70 custom-scrollbar">
+                            <div class="flex items-start gap-3 max-w-[85%]">
+                                <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 text-xs mt-0.5 border border-blue-200">
+                                    <i class="fa-solid fa-robot"></i>
+                                </div>
+                                <div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-200 shadow-xs text-xs space-y-2 text-slate-700">
+                                    <p>
+                                        Hello! 👋 I am your <strong>QuickFix AI Assistant</strong>. How can I help you with your maid subscription, caregiver scheduling, or repair booking today?
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Typing Indicator -->
+                        <div id="aiTyping" class="px-5 py-2 bg-slate-100 hidden flex items-center gap-2 text-xs text-slate-500">
+                            <div class="w-6 h-6 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-[10px]">
                                 <i class="fa-solid fa-robot"></i>
                             </div>
-                            <div class="bg-cyber-850 p-3.5 rounded-2xl rounded-tl-none border border-slate-800 text-xs space-y-2 text-slate-200">
-                                <p>
-                                    Hello! 👋 I am your <strong>QuickFix AI Assistant</strong>. How can I help you with your maid subscription, caregiver scheduling, or repair booking today?
-                                </p>
+                            <span class="font-semibold text-[11px]">QuickFix AI processing request</span>
+                            <div class="flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-blue-600 rounded-full dot-1"></span>
+                                <span class="w-1.5 h-1.5 bg-blue-600 rounded-full dot-2"></span>
+                                <span class="w-1.5 h-1.5 bg-blue-600 rounded-full dot-3"></span>
+                            </div>
+                        </div>
+
+                        <!-- Quick Action Chips -->
+                        <div class="p-3 bg-white border-t border-slate-200 flex items-center gap-2 overflow-x-auto custom-scrollbar">
+                            <button onclick="sendQuickPrompt('When will my specialist arrive?')" class="px-3.5 py-1.5 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-xl text-[11px] font-bold whitespace-nowrap transition border border-slate-200">
+                                ⏱️ Track Arrival Time
+                            </button>
+                            <button onclick="sendQuickPrompt('How does maid subscription interview work?')" class="px-3.5 py-1.5 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-xl text-[11px] font-bold whitespace-nowrap transition border border-slate-200">
+                                🧹 Maid Subscription Info
+                            </button>
+                            <button onclick="sendQuickPrompt('Check UPI Refund Status')" class="px-3.5 py-1.5 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-xl text-[11px] font-bold whitespace-nowrap transition border border-slate-200">
+                                💳 UPI Refund Status
+                            </button>
+                        </div>
+
+                        <!-- Chat Form -->
+                        <form onsubmit="handleChatSubmit(event)" class="p-3 bg-white border-t border-slate-200 flex items-center gap-2">
+                            <input type="text" id="chatInput" placeholder="Type your issue or concern here..." class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                            <button type="submit" class="w-10 h-10 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition shrink-0 font-bold shadow-md">
+                                <i class="fa-solid fa-paper-plane text-xs"></i>
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 2: FOR PROFESSIONALS / VENDORS     -->
+        <!-- ========================================== -->
+        <div id="portal-vendor" class="hidden space-y-8">
+            
+            <!-- Vendor Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 p-8 sm:p-12 text-white shadow-2xl">
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="space-y-3 text-center md:text-left">
+                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">
+                            <i class="fa-solid fa-circle-check text-emerald-400"></i> OFFICIAL QUICKFIX PARTNER PORTAL
+                        </span>
+                        <h1 class="text-3xl sm:text-4xl font-black tracking-tight">Earn Daily as a Verified Professional</h1>
+                        <p class="text-slate-200 text-xs sm:text-sm max-w-xl">Accept customer jobs in your area, start work using Job OTPs, and receive instant daily UPI payouts.</p>
+                    </div>
+
+                    <!-- Verification Badge Status -->
+                    <div class="bg-white/10 backdrop-blur-md p-5 rounded-3xl border border-white/10 text-center space-y-2 shrink-0">
+                        <div class="w-12 h-12 bg-emerald-500 text-slate-950 font-black rounded-2xl flex items-center justify-center mx-auto text-xl shadow-lg">
+                            <i class="fa-solid fa-user-check"></i>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-black text-emerald-300 uppercase tracking-widest">PARTNER STATUS</span>
+                            <span class="text-sm font-extrabold text-white">KYC Verified & Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Partner Dashboard Metrics -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="light-card p-5 rounded-3xl border border-slate-200">
+                    <div class="flex items-center justify-between text-slate-500 text-xs font-bold">
+                        <span>TODAY'S EARNINGS</span>
+                        <i class="fa-solid fa-wallet text-emerald-600 text-base"></i>
+                    </div>
+                    <div class="mt-2 flex items-baseline justify-between">
+                        <span class="text-2xl font-black text-slate-900">₹2,450</span>
+                        <span class="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">+18% vs Yesterday</span>
+                    </div>
+                </div>
+
+                <div class="light-card p-5 rounded-3xl border border-slate-200">
+                    <div class="flex items-center justify-between text-slate-500 text-xs font-bold">
+                        <span>MONTHLY PAYOUT</span>
+                        <i class="fa-solid fa-indian-rupee-sign text-blue-600 text-base"></i>
+                    </div>
+                    <div class="mt-2 flex items-baseline justify-between">
+                        <span class="text-2xl font-black text-slate-900">₹38,200</span>
+                        <span class="text-[10px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded">Auto-Payout Ready</span>
+                    </div>
+                </div>
+
+                <div class="light-card p-5 rounded-3xl border border-slate-200">
+                    <div class="flex items-center justify-between text-slate-500 text-xs font-bold">
+                        <span>JOBS COMPLETED</span>
+                        <i class="fa-solid fa-circle-check text-indigo-600 text-base"></i>
+                    </div>
+                    <div class="mt-2 flex items-baseline justify-between">
+                        <span class="text-2xl font-black text-slate-900">42 Jobs</span>
+                        <span class="text-[10px] font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">100% Completion</span>
+                    </div>
+                </div>
+
+                <div class="light-card p-5 rounded-3xl border border-slate-200">
+                    <div class="flex items-center justify-between text-slate-500 text-xs font-bold">
+                        <span>CUSTOMER RATING</span>
+                        <i class="fa-solid fa-star text-amber-500 text-base"></i>
+                    </div>
+                    <div class="mt-2 flex items-baseline justify-between">
+                        <span class="text-2xl font-black text-slate-900">4.92 ★</span>
+                        <span class="text-[10px] font-black text-amber-700 bg-amber-50 px-2 py-0.5 rounded">Top Rated Partner</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Vendor Onboarding / Profile Form -->
+                <div class="lg:col-span-5 light-card p-6 rounded-3xl space-y-5 border border-slate-200">
+                    <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+                        <h3 class="text-sm font-black text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-id-card text-emerald-600"></i> Partner Profile & Registration
+                        </h3>
+                        <span class="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">KYC Verified</span>
+                    </div>
+
+                    <form onsubmit="handlePartnerRegister(event)" class="space-y-4 text-xs">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Full Name</label>
+                            <input type="text" id="partnerName" value="Vikram Sharma" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-900">
+                        </div>
+
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Primary Trade / Specialty</label>
+                            <select id="partnerTrade" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-900">
+                                <option value="Plumbing & Pipe Fixing">Plumbing & Pipe Fixing</option>
+                                <option value="House Maid Caregiver">House Maid Caregiver</option>
+                                <option value="Child Care & Babysitting">Child Care & Babysitting</option>
+                                <option value="Patient Caregiver Nurse">Patient Caregiver Nurse</option>
+                                <option value="Mobile Repair Technician">Mobile Repair Technician</option>
+                                <option value="Home & Deep Cleaning">Home & Deep Cleaning</option>
+                                <option value="Car & Bike Wash Polish">Car & Bike Wash Polish</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Phone Number</label>
+                                <input type="tel" id="partnerPhone" value="+91 98123 45678" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-900">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Service PIN Code</label>
+                                <input type="text" id="partnerZip" value="380054" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-900">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Identity Proof (Aadhaar / PAN)</label>
+                            <div class="border-2 border-dashed border-slate-200 bg-slate-50 p-4 rounded-xl text-center cursor-pointer hover:border-emerald-500 transition">
+                                <i class="fa-solid fa-cloud-arrow-up text-emerald-600 text-lg mb-1"></i>
+                                <span class="block text-[11px] font-bold text-slate-700">Aadhaar_Card_Verified.pdf</span>
+                                <span class="text-[9px] text-slate-400">KYC Verification Complete</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl shadow-md transition">
+                            Update Partner Preferences
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Vendor Live Workfeed & Job OTP Console -->
+                <div class="lg:col-span-7 space-y-6">
+                    
+                    <!-- Active Job Verification Console -->
+                    <div class="light-card p-6 rounded-3xl border-2 border-blue-600 space-y-4 shadow-md bg-blue-50/20">
+                        <div class="flex items-center justify-between border-b border-blue-100 pb-3">
+                            <span class="text-xs font-black uppercase tracking-wider text-blue-700 flex items-center gap-1.5">
+                                <i class="fa-solid fa-bolt text-amber-500"></i> Active Assigned Job
+                            </span>
+                            <span class="bg-blue-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full">IN PROGRESS</span>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
+                            <div>
+                                <h4 class="text-base font-black text-slate-900" id="vendorActiveJobTitle">House Maid (Part-Time Daily)</h4>
+                                <p class="text-slate-600 font-semibold" id="vendorActiveCustomer">Client: Aarav Mehta &bull; Flat 301, Titanium Heights</p>
+                                <p class="text-blue-600 font-extrabold mt-1" id="vendorActiveEarnings">Payout: ₹4,129 (Paid via UPI)</p>
+                            </div>
+
+                            <!-- OTP Verification Form for Vendor -->
+                            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 space-y-2 shrink-0 w-full sm:w-auto text-center shadow-xs">
+                                <label class="block text-[10px] font-black text-slate-500 uppercase">ENTER CLIENT JOB OTP</label>
+                                <div class="flex items-center gap-2 justify-center">
+                                    <input type="text" id="vendorOtpInput" placeholder="4829" maxlength="4" class="w-20 text-center font-mono text-base font-black bg-slate-100 border border-slate-300 rounded-xl py-1 focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                                    <button onclick="verifyVendorOtp()" class="px-3 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition shadow-xs">
+                                        Verify & Start
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- AI Typing Indicator -->
-                    <div id="aiTyping" class="px-4 py-2 bg-cyber-900/40 hidden flex items-center gap-2 text-xs text-slate-400">
-                        <div class="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-[10px]">
-                            <i class="fa-solid fa-robot"></i>
+                    <!-- Incoming Customer Job Requests -->
+                    <div class="light-card p-6 rounded-3xl space-y-4 border border-slate-200">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="text-sm font-black text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-tower-broadcast text-emerald-600"></i> Nearby Customer Job Requests
+                            </h3>
+                            <span class="text-xs font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">Live Feed</span>
                         </div>
-                        <span class="font-medium text-[11px]">QuickFix AI processing request</span>
-                        <div class="flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full dot-1"></span>
-                            <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full dot-2"></span>
-                            <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full dot-3"></span>
+
+                        <div id="vendorRequestsFeed" class="space-y-3">
+                            <!-- Populated via JS -->
                         </div>
                     </div>
-
-                    <!-- Quick Action Chips -->
-                    <div class="p-2.5 bg-cyber-950 border-t border-slate-800/80 flex items-center gap-2 overflow-x-auto custom-scrollbar">
-                        <button onclick="sendQuickPrompt('When will my specialist arrive?')" class="px-3 py-1.5 bg-cyber-850 hover:bg-cyan-500/10 text-slate-300 hover:text-cyan-300 rounded-xl text-[11px] font-semibold whitespace-nowrap transition border border-slate-800">
-                            ⏱️ Track Arrival Time
-                        </button>
-                        <button onclick="sendQuickPrompt('How does maid subscription interview work?')" class="px-3 py-1.5 bg-cyber-850 hover:bg-cyan-500/10 text-slate-300 hover:text-cyan-300 rounded-xl text-[11px] font-semibold whitespace-nowrap transition border border-slate-800">
-                            🧹 Maid Subscription Info
-                        </button>
-                        <button onclick="sendQuickPrompt('Check UPI Refund Status')" class="px-3 py-1.5 bg-cyber-850 hover:bg-cyan-500/10 text-slate-300 hover:text-cyan-300 rounded-xl text-[11px] font-semibold whitespace-nowrap transition border border-slate-800">
-                            💳 UPI Refund Status
-                        </button>
-                    </div>
-
-                    <!-- Chat Input Form -->
-                    <form onsubmit="handleChatSubmit(event)" class="p-3 bg-cyber-950 border-t border-slate-800 flex items-center gap-2">
-                        <input type="text" id="chatInput" placeholder="Type your issue or concern here..." class="flex-1 bg-cyber-850 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                        <button type="submit" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-slate-950 flex items-center justify-center transition shrink-0 font-bold shadow-md">
-                            <i class="fa-solid fa-paper-plane text-xs"></i>
-                        </button>
-                    </form>
 
                 </div>
 
             </div>
+
         </div>
 
     </main>
 
     <!-- FOOTER -->
-    <footer class="mt-auto bg-cyber-950 border-t border-slate-800/80 py-6">
+    <footer class="mt-auto bg-white border-t border-slate-200 py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
             <div class="flex items-center gap-2">
-                <span class="font-bold text-slate-300">QuickFix Home Services Platform</span>
+                <span class="font-black text-slate-900">QuickFix Home Services Platform</span>
                 <span>&copy; 2026. All rights reserved.</span>
             </div>
             <div class="flex items-center gap-4">
-                <span class="flex items-center gap-1"><i class="fa-solid fa-shield-halved text-cyan-400"></i> Verified Care Professionals</span>
-                <span class="flex items-center gap-1"><i class="fa-solid fa-qrcode text-violet-400"></i> Dynamic UPI QR</span>
-                <button onclick="switchTab('help')" class="text-cyan-400 hover:underline font-semibold">Support Desk</button>
+                <span class="flex items-center gap-1 text-slate-600 font-semibold"><i class="fa-solid fa-shield-halved text-blue-600"></i> Verified Care Professionals</span>
+                <span class="flex items-center gap-1 text-slate-600 font-semibold"><i class="fa-solid fa-qrcode text-indigo-600"></i> Dynamic UPI QR</span>
+                <button onclick="switchTab('help')" class="text-blue-600 hover:underline font-bold">Support Desk</button>
             </div>
         </div>
     </footer>
 
     <!-- CART & CHECKOUT DRAWER -->
     <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden hidden">
-        <div onclick="closeCartDrawer()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity"></div>
+        <div onclick="closeCartDrawer()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
 
         <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
-            <div class="w-screen max-w-md bg-cyber-950 border-l border-slate-800 shadow-2xl flex flex-col text-slate-200">
+            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col text-slate-800">
                 
                 <!-- Drawer Header -->
-                <div class="p-5 bg-cyber-900 border-b border-slate-800 flex items-center justify-between">
+                <div class="p-5 bg-slate-900 text-white flex items-center justify-between">
                     <div>
-                        <h2 class="text-lg font-black text-white flex items-center gap-2" id="drawerHeaderTitle">
-                            <i class="fa-solid fa-calendar-check text-cyan-400"></i> Complete Booking
+                        <h2 class="text-lg font-black flex items-center gap-2" id="drawerHeaderTitle">
+                            <i class="fa-solid fa-calendar-check text-blue-400"></i> Complete Booking
                         </h2>
-                        <p class="text-xs text-slate-400" id="drawerHeaderSub">Verified professional assignment</p>
+                        <p class="text-xs text-slate-300" id="drawerHeaderSub">Verified professional assignment</p>
                     </div>
-                    <button onclick="closeCartDrawer()" class="w-8 h-8 rounded-full bg-cyber-850 hover:bg-cyber-800 flex items-center justify-center text-slate-400 transition border border-slate-800">
+                    <button onclick="closeCartDrawer()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-300 transition">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
 
-                <!-- Drawer Content Scroll -->
-                <div class="flex-1 overflow-y-auto p-5 space-y-6 custom-scrollbar">
+                <!-- Content Scroll Area -->
+                <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-slate-50">
                     
                     <!-- Selected Service Details -->
-                    <div id="selectedServiceSummary" class="glass-card p-4 rounded-2xl">
+                    <div id="selectedServiceSummary" class="light-card p-4 rounded-2xl">
                         <!-- Populated dynamically -->
                     </div>
 
                     <!-- Checkout Form -->
                     <form id="bookingForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
-                        <h3 class="text-xs font-black text-cyan-400 uppercase tracking-wider">1. Service Address & Contact</h3>
+                        <h3 class="text-xs font-black text-blue-600 uppercase tracking-wider">1. Service Address & Contact</h3>
                         
                         <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">Full Name *</label>
-                            <input type="text" id="custName" required placeholder="Aarav Mehta" class="w-full px-3 py-2 text-xs bg-cyber-900 border border-slate-800 rounded-xl text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Full Name *</label>
+                            <input type="text" id="custName" required placeholder="Aarav Mehta" class="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-200 rounded-xl text-slate-900 focus:ring-2 focus:ring-blue-600 focus:outline-none">
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-300 mb-1">Mobile No *</label>
-                                <input type="tel" id="custPhone" required placeholder="+91 98765 43210" class="w-full px-3 py-2 text-xs bg-cyber-900 border border-slate-800 rounded-xl text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none">
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Mobile No *</label>
+                                <input type="tel" id="custPhone" required placeholder="+91 98765 43210" class="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-200 rounded-xl text-slate-900 focus:ring-2 focus:ring-blue-600 focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-300 mb-1">Pincode *</label>
-                                <input type="text" id="custZip" required placeholder="380054" class="w-full px-3 py-2 text-xs bg-cyber-900 border border-slate-800 rounded-xl text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none">
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Pincode *</label>
+                                <input type="text" id="custZip" required placeholder="380054" class="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-200 rounded-xl text-slate-900 focus:ring-2 focus:ring-blue-600 focus:outline-none">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">Full Address & Landmark *</label>
-                            <textarea id="custAddress" required rows="2" placeholder="Flat 301, Titanium Heights, SG Highway, Ahmedabad" class="w-full px-3 py-2 text-xs bg-cyber-900 border border-slate-800 rounded-xl text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none resize-none"></textarea>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Full Address & Landmark *</label>
+                            <textarea id="custAddress" required rows="2" placeholder="Flat 301, Titanium Heights, SG Highway, Ahmedabad" class="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-200 rounded-xl text-slate-900 focus:ring-2 focus:ring-blue-600 focus:outline-none resize-none"></textarea>
                         </div>
 
-                        <!-- DYNAMIC SLOT SELECTION (SITTER / MAID / CARETAKER vs INSTANT REPAIRS) -->
+                        <!-- DYNAMIC SLOT SELECTION -->
                         <div class="space-y-2 pt-2" id="slotSelectionContainer">
-                            <!-- Populated via JS based on Service Type -->
+                            <!-- Populated via JS -->
                         </div>
 
-                        <h3 class="text-xs font-black text-cyan-400 uppercase tracking-wider pt-2">3. Dynamic UPI Payment QR</h3>
+                        <h3 class="text-xs font-black text-blue-600 uppercase tracking-wider pt-2">3. Dynamic UPI Payment QR</h3>
                         
-                        <div class="bg-cyber-900 p-4 rounded-2xl border border-slate-800 space-y-4">
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-4 shadow-xs">
                             <div class="flex items-center justify-between text-xs">
-                                <span class="text-slate-400 font-semibold">Pay via UPI QR</span>
-                                <span class="bg-cyan-500/10 text-cyan-300 px-2 py-0.5 rounded font-bold text-[10px] border border-cyan-500/20">Zero Gateway Fee</span>
+                                <span class="text-slate-600 font-bold">Pay via UPI QR</span>
+                                <span class="bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full font-black text-[10px] border border-emerald-200">Zero Gateway Fee</span>
                             </div>
 
-                            <div class="flex items-center gap-4 bg-cyber-950 p-3 rounded-xl border border-slate-800/80">
-                                <div class="bg-white p-2 rounded-xl shadow-lg flex flex-col items-center shrink-0">
-                                    <div id="qrcodeHolder" class="w-28 h-28 flex items-center justify-center bg-slate-100 rounded">
-                                        <!-- QR canvas via JS -->
+                            <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                                <div class="bg-white p-2 rounded-xl shadow-md flex flex-col items-center shrink-0 border border-slate-200">
+                                    <div id="qrcodeHolder" class="w-28 h-28 flex items-center justify-center bg-slate-50 rounded">
+                                        <!-- QR canvas generated via JS -->
                                     </div>
-                                    <span class="text-[9px] text-slate-700 font-bold mt-1">Scan via UPI</span>
+                                    <span class="text-[9px] text-slate-600 font-black mt-1">Scan via UPI App</span>
                                 </div>
 
                                 <div class="space-y-1.5 text-xs">
-                                    <p class="font-bold text-white text-sm">GPay, PhonePe, Paytm, BHIM</p>
-                                    <p class="text-slate-400 text-[11px]">Instant order booking confirmation</p>
+                                    <p class="font-extrabold text-slate-900 text-sm">GPay, PhonePe, Paytm, BHIM</p>
+                                    <p class="text-slate-500 text-[11px]">Instant order booking confirmation</p>
                                     <div class="pt-1 flex items-center gap-2">
-                                        <span class="text-slate-400 text-[10px]">Payable Total:</span>
-                                        <span id="qrTotalAmount" class="text-base font-black text-cyan-400">₹0</span>
+                                        <span class="text-slate-500 text-[10px]">Payable Total:</span>
+                                        <span id="qrTotalAmount" class="text-lg font-black text-blue-600">₹0</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-xs bg-cyber-950 p-2.5 rounded-xl">
-                                <span class="text-slate-400 font-mono text-[11px]">quickfix@upi</span>
-                                <button type="button" onclick="copyUpiId()" class="text-cyan-400 hover:text-cyan-300 font-bold text-[11px] flex items-center gap-1">
+                            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs bg-slate-50 p-2.5 rounded-xl">
+                                <span class="text-slate-600 font-mono text-[11px] font-bold">quickfix@upi</span>
+                                <button type="button" onclick="copyUpiId()" class="text-blue-600 hover:text-blue-800 font-black text-[11px] flex items-center gap-1">
                                     <i class="fa-regular fa-copy"></i> Copy VPA
                                 </button>
                             </div>
                         </div>
 
                         <!-- Price Breakdown -->
-                        <div class="space-y-1.5 text-xs text-slate-400 pt-2 border-t border-slate-800">
+                        <div class="space-y-1.5 text-xs text-slate-600 pt-2 border-t border-slate-200">
                             <div class="flex justify-between">
                                 <span>Base Plan Price</span>
                                 <span id="priceSubtotal">₹0</span>
                             </div>
-                            <div class="flex justify-between font-bold text-emerald-400">
+                            <div class="flex justify-between font-bold text-emerald-600">
                                 <span>Verification & Matchmaking Fee</span>
                                 <span>FREE (₹0)</span>
                             </div>
@@ -635,19 +870,19 @@
                                 <span>GST & Insurance (18%)</span>
                                 <span id="priceTax">₹0</span>
                             </div>
-                            <div class="flex justify-between font-black text-white text-sm pt-1 border-t border-slate-800">
+                            <div class="flex justify-between font-black text-slate-900 text-base pt-2 border-t border-slate-200">
                                 <span>Final Amount Payable</span>
-                                <span id="priceTotal" class="text-cyan-400">₹0</span>
+                                <span id="priceTotal" class="text-blue-600">₹0</span>
                             </div>
                         </div>
 
                         <!-- Pre-Payment SLA Statement -->
-                        <p class="text-[10px] text-slate-400 text-center font-bold bg-cyber-900 p-2.5 rounded-xl border border-slate-800" id="checkoutSlaNote">
-                            <i class="fa-solid fa-shield-halved text-cyan-400 mr-1"></i>
+                        <p class="text-[10px] text-slate-600 text-center font-bold bg-blue-50 p-3 rounded-xl border border-blue-100" id="checkoutSlaNote">
+                            <i class="fa-solid fa-shield-halved text-blue-600 mr-1"></i>
                             Verified professional assignment guaranteed upon payment confirmation.
                         </p>
 
-                        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-cyan-500 via-indigo-600 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-slate-950 font-black rounded-xl shadow-lg shadow-cyan-500/20 transition flex items-center justify-center gap-2">
+                        <button type="submit" class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2">
                             <i class="fa-solid fa-check-circle text-base"></i>
                             <span>Confirm & Pay via UPI</span>
                         </button>
@@ -659,52 +894,52 @@
     </div>
 
     <!-- SUCCESS RECEIPT MODAL -->
-    <div id="receiptModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
-        <div class="glass-card max-w-md w-full rounded-3xl p-6 sm:p-8 space-y-6 border border-cyan-500/30">
+    <div id="receiptModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs hidden">
+        <div class="bg-white max-w-md w-full rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200">
             <div class="text-center space-y-2">
-                <div class="w-16 h-16 bg-cyan-500/20 text-cyan-400 rounded-full flex items-center justify-center mx-auto text-2xl border border-cyan-500/30">
+                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto text-3xl border border-blue-200">
                     <i class="fa-solid fa-circle-check animate-bounce"></i>
                 </div>
-                <h3 class="text-xl font-black text-white">Booking Confirmed!</h3>
-                <p class="text-xs text-slate-400">Order Ref ID: <span id="receiptOrderId" class="font-mono text-cyan-400 font-bold">#QF-9872</span></p>
+                <h3 class="text-2xl font-black text-slate-900">Booking Confirmed!</h3>
+                <p class="text-xs text-slate-500">Order Ref ID: <span id="receiptOrderId" class="font-mono text-blue-600 font-bold">#QF-9872</span></p>
             </div>
 
-            <div class="bg-cyber-950 rounded-2xl p-4 text-xs space-y-3 border border-slate-800">
-                <div class="flex justify-between items-center pb-2 border-b border-slate-800 font-bold text-white">
+            <div class="bg-slate-50 rounded-2xl p-4 text-xs space-y-3 border border-slate-200">
+                <div class="flex justify-between items-center pb-2 border-b border-slate-200 font-bold text-slate-900">
                     <span id="receiptServiceName">House Maid (Subscription)</span>
-                    <span id="receiptAmount" class="text-cyan-400 font-black text-sm">₹0</span>
+                    <span id="receiptAmount" class="text-blue-600 font-black text-sm">₹0</span>
                 </div>
-                <div class="grid grid-cols-2 gap-2 text-slate-400">
+                <div class="grid grid-cols-2 gap-2 text-slate-600">
                     <div>
-                        <span class="block text-[10px] text-slate-500">SCHEDULE TYPE</span>
-                        <span id="receiptDate" class="font-bold text-cyan-400">Scheduled Visit</span>
+                        <span class="block text-[10px] text-slate-400 font-bold">SCHEDULE TYPE</span>
+                        <span id="receiptDate" class="font-bold text-blue-600">Scheduled Visit</span>
                     </div>
                     <div>
-                        <span class="block text-[10px] text-slate-500">TARGET TIME / SLOT</span>
-                        <span id="receiptTime" class="font-bold text-white">--</span>
+                        <span class="block text-[10px] text-slate-400 font-bold">TARGET TIME / SLOT</span>
+                        <span id="receiptTime" class="font-bold text-slate-900">--</span>
                     </div>
                 </div>
-                <div class="pt-2 border-t border-slate-800">
-                    <span class="block text-[10px] text-slate-500">SERVICE ADDRESS</span>
-                    <p id="receiptAddress" class="font-medium text-white line-clamp-2">--</p>
+                <div class="pt-2 border-t border-slate-200">
+                    <span class="block text-[10px] text-slate-400 font-bold">SERVICE ADDRESS</span>
+                    <p id="receiptAddress" class="font-medium text-slate-800 line-clamp-2">--</p>
                 </div>
             </div>
 
-            <button onclick="closeReceiptModal()" class="w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black rounded-xl text-xs transition">
+            <button onclick="closeReceiptModal()" class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl text-xs transition shadow-md">
                 Open Live Tracking Dashboard
             </button>
         </div>
     </div>
 
     <!-- TOAST NOTIFICATION -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-cyber-850 border border-cyan-500/30 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-semibold translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
-        <i class="fa-solid fa-circle-info text-cyan-400 text-base"></i>
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 border border-slate-800 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-bold translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <i class="fa-solid fa-circle-info text-blue-400 text-base"></i>
         <span id="toastMsg">Action completed successfully</span>
     </div>
 
-    <!-- JAVASCRIPT APP LOGIC -->
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
     <script>
-        // CARE & SUBSCRIPTION SERVICES AT VERY TOP OF THE ARRAY
+        // CARE & SUBSCRIPTION SERVICES AT VERY TOP
         const SERVICES = [
             {
                 id: 'srv-maid',
@@ -834,7 +1069,15 @@
             }
         ];
 
+        // MOCK VENDOR REQUESTS FEED
+        const VENDOR_REQUESTS = [
+            { id: 'REQ-101', title: 'Plumbing Tap Leakage Repair', distance: '1.2 km away', payout: '₹353', location: 'Titanium Heights, SG Highway', time: 'Immediate (Express 60-min)' },
+            { id: 'REQ-102', title: 'Doorstep Sedan Foam Wash', distance: '2.5 km away', payout: '₹588', location: 'Iscon Elegance, Prahlad Nagar', time: 'Today 04:00 PM' },
+            { id: 'REQ-103', title: '2 BHK House Deep Cleaning', distance: '3.1 km away', payout: '₹1,532', location: 'Shivalik Shilp, Bodakdev', time: 'Tomorrow 10:00 AM' }
+        ];
+
         // APP STATE
+        let activeRole = 'customer'; // 'customer' or 'vendor'
         let currentCart = null;
         let myBookings = [
             {
@@ -844,31 +1087,78 @@
                 totalAmount: 4129,
                 customerName: 'Aarav Mehta',
                 address: 'Flat 301, Titanium Heights, SG Highway, Ahmedabad',
-                scheduleType: 'care_interview',
+                scheduleType: '📅 Care Interview & Assessment',
                 scheduleDate: 'Tomorrow Morning',
                 scheduleTime: '08:00 AM - 10:00 AM',
-                targetTime: 'Tomorrow 08:00 AM',
-                specialistName: 'Sunita Sharma (Verified Maid)',
+                targetTime: 'Tomorrow (08:00 AM - 10:00 AM)',
+                specialistName: 'Sunita Sharma (Verified Care Specialist)',
                 specialistPhone: '+91 98765 12345',
                 specialistRating: '4.9 ★',
                 jobOtp: '4829',
-                status: 'In-Person Interview & Start Scheduled',
-                timestamp: 'Oct 23, 2026'
+                status: 'Caregiver Assigned & Interview Scheduled',
+                timestamp: 'Oct 24, 2026'
             }
         ];
         let selectedCategoryFilter = 'all';
         let currentAttachedOrder = null;
 
-        // INIT
+        // INIT ON LOAD
         window.addEventListener('DOMContentLoaded', () => {
             renderServices();
             updateBookingsUI();
             populateSupportOrdersDropdown();
+            renderVendorRequestsFeed();
             updateLiveTimeDisplays();
-            setInterval(updateLiveTimeDisplays, 30000); // Dynamic IST time recalculation
+            setInterval(updateLiveTimeDisplays, 30000);
         });
 
-        // Dynamic current time + 60 mins calculator
+        // ROLE SELECTION HANDLERS
+        function selectRole(role) {
+            document.getElementById('roleModal').classList.add('hidden');
+            switchRole(role);
+        }
+
+        function switchRole(role) {
+            activeRole = role;
+            const btnCust = document.getElementById('btnRoleCustomer');
+            const btnVend = document.getElementById('btnRoleVendor');
+            const portalCust = document.getElementById('portal-customer');
+            const portalVend = document.getElementById('portal-vendor');
+            const roleBadge = document.getElementById('activeRoleBadge');
+            const custNav = document.getElementById('customerNav');
+            const cartTriggerBtn = document.getElementById('cartTriggerBtn');
+            const expressNav = document.getElementById('expressLiveNavDisplay');
+
+            if (role === 'customer') {
+                btnCust.className = "px-3 py-1.5 rounded-xl text-xs font-black transition bg-blue-600 text-white shadow-xs";
+                btnVend.className = "px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition";
+                
+                portalCust.classList.remove('hidden');
+                portalVend.classList.add('hidden');
+                
+                roleBadge.innerText = "FOR CUSTOMERS";
+                roleBadge.className = "bg-blue-50 text-blue-700 text-[10px] font-black px-2 py-0.5 rounded-full border border-blue-200";
+                
+                custNav.classList.remove('hidden');
+                cartTriggerBtn.classList.remove('hidden');
+                expressNav.classList.remove('hidden');
+                switchTab('services');
+            } else {
+                btnVend.className = "px-3 py-1.5 rounded-xl text-xs font-black transition bg-emerald-600 text-white shadow-xs";
+                btnCust.className = "px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition";
+                
+                portalVend.classList.remove('hidden');
+                portalCust.classList.add('hidden');
+                
+                roleBadge.innerText = "FOR VENDORS";
+                roleBadge.className = "bg-emerald-50 text-emerald-700 text-[10px] font-black px-2 py-0.5 rounded-full border border-emerald-200";
+                
+                custNav.classList.add('hidden');
+                cartTriggerBtn.classList.add('hidden');
+                expressNav.classList.add('hidden');
+            }
+        }
+
         function getFutureTimeFormatted(addMinutes) {
             const now = new Date();
             now.setMinutes(now.getMinutes() + addMinutes);
@@ -900,7 +1190,9 @@
 
         function renderServices() {
             const grid = document.getElementById('servicesGrid');
-            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            if (!grid) return;
+
+            const searchVal = document.getElementById('searchInput') ? document.getElementById('searchInput').value.toLowerCase() : '';
 
             const filtered = SERVICES.filter(srv => {
                 const matchesCat = selectedCategoryFilter === 'all' || srv.category === selectedCategoryFilter;
@@ -911,9 +1203,9 @@
 
             if (filtered.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-full text-center py-12 text-slate-500 space-y-2">
-                        <i class="fa-solid fa-magnifying-glass text-3xl"></i>
-                        <p class="text-xs font-semibold">No services found matching your search term.</p>
+                    <div class="col-span-full text-center py-16 text-slate-500 space-y-3">
+                        <i class="fa-solid fa-magnifying-glass text-4xl text-slate-300"></i>
+                        <p class="text-sm font-bold">No services found matching your search term.</p>
                     </div>
                 `;
                 return;
@@ -924,43 +1216,43 @@
                 const isCare = srv.isCareSubscription;
 
                 return `
-                    <div class="glass-card rounded-3xl overflow-hidden transition flex flex-col group border ${isCare ? 'border-cyan-500/40' : 'border-slate-800'}">
-                        <!-- Image Header -->
-                        <div class="relative h-48 overflow-hidden bg-cyber-900">
+                    <div class="light-card rounded-3xl overflow-hidden transition flex flex-col group border ${isCare ? 'border-blue-200' : 'border-slate-200'} shadow-sm hover:shadow-xl">
+                        <!-- Image Container -->
+                        <div class="relative h-48 overflow-hidden bg-slate-100">
                             <img src="${srv.image}" alt="${srv.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <span class="absolute top-3 left-3 ${isCare ? 'bg-amber-400 text-slate-950 font-black' : 'bg-cyber-950/90 text-cyan-300 font-bold'} text-[10px] px-2.5 py-1 rounded-full border ${isCare ? 'border-amber-300' : 'border-cyan-500/40'} flex items-center gap-1 shadow-md">
-                                <i class="fa-solid ${isCare ? 'fa-calendar-check' : 'fa-bolt text-amber-400'}"></i> ${srv.badge}
+                            <span class="absolute top-3 left-3 ${isCare ? 'bg-amber-400 text-slate-950 font-black' : 'bg-blue-600 text-white font-black'} text-[10px] px-3 py-1 rounded-full shadow-md flex items-center gap-1.5">
+                                <i class="fa-solid ${isCare ? 'fa-calendar-check' : 'fa-bolt'}"></i> ${srv.badge}
                             </span>
-                            <div class="absolute bottom-3 right-3 bg-cyber-950/90 text-slate-200 text-xs font-bold px-2.5 py-1 rounded-full border border-slate-800 flex items-center gap-1">
-                                <i class="fa-solid fa-star text-amber-400"></i> ${srv.rating}
+                            <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-xs text-slate-800 text-xs font-bold px-3 py-1 rounded-full border border-slate-200 flex items-center gap-1 shadow-xs">
+                                <i class="fa-solid fa-star text-amber-500"></i> ${srv.rating}
                             </div>
                         </div>
 
-                        <!-- Body -->
-                        <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                        <!-- Card Body -->
+                        <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
                             <div>
-                                <h3 class="text-base font-bold text-white flex items-center justify-between">
+                                <h3 class="text-lg font-black text-slate-900 flex items-center justify-between">
                                     <span>${srv.title}</span>
                                 </h3>
-                                <p class="text-[11px] ${isCare ? 'text-amber-400 font-semibold' : 'text-cyan-400 font-semibold'} mt-0.5">
+                                <p class="text-xs ${isCare ? 'text-amber-700 font-bold' : 'text-blue-600 font-bold'} mt-0.5">
                                     ${isCare ? '📅 Structured Interview & Monthly Care Plan' : '⚡ 60-Minute Doorstep Express Arrival'}
                                 </p>
 
-                                <div class="mt-3">
-                                    <select id="select-${srv.id}" onchange="updateCardPrice('${srv.id}')" class="w-full text-xs font-medium bg-cyber-950 border border-slate-800 rounded-xl px-3 py-2.5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                <div class="mt-4">
+                                    <select id="select-${srv.id}" onchange="updateCardPrice('${srv.id}')" class="w-full text-xs font-medium bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600">
                                         ${srv.options.map(opt => `<option value="${opt.id}">${opt.name}</option>`).join('')}
                                     </select>
                                 </div>
                             </div>
 
                             <!-- Footer -->
-                            <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+                            <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
                                 <div>
-                                    <span class="text-[9px] text-slate-500 uppercase font-bold block">Pricing Plan</span>
-                                    <span id="price-display-${srv.id}" class="text-base font-black text-cyan-400">₹${defaultOpt.price.toLocaleString('en-IN')}</span>
-                                    <span id="duration-display-${srv.id}" class="text-[10px] text-slate-400 block">${defaultOpt.duration}</span>
+                                    <span class="text-[9px] text-slate-400 uppercase font-bold block">PRICING PLAN</span>
+                                    <span id="price-display-${srv.id}" class="text-lg font-black text-blue-600">₹${defaultOpt.price.toLocaleString('en-IN')}</span>
+                                    <span id="duration-display-${srv.id}" class="text-[10px] text-slate-500 font-semibold block">${defaultOpt.duration}</span>
                                 </div>
-                                <button onclick="addToCart('${srv.id}')" class="px-4 py-2.5 bg-gradient-to-tr from-cyan-500 via-indigo-600 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-slate-950 rounded-xl text-xs font-black transition flex items-center gap-1.5 shadow-md active:scale-95">
+                                <button onclick="addToCart('${srv.id}')" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-extrabold transition flex items-center gap-1.5 shadow-md shadow-blue-500/20 active:scale-95">
                                     <span>${isCare ? 'Schedule Care' : 'Book 60-Min'}</span>
                                     <i class="fa-solid ${isCare ? 'fa-calendar-days' : 'fa-bolt'} text-[10px]"></i>
                                 </button>
@@ -984,11 +1276,13 @@
         function filterCategory(cat) {
             selectedCategoryFilter = cat;
             document.querySelectorAll('.cat-chip').forEach(btn => {
-                btn.classList.remove('bg-cyan-500', 'text-slate-950');
-                btn.classList.add('bg-cyber-850', 'text-slate-300');
+                btn.classList.remove('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-500/20');
+                btn.classList.add('bg-white', 'text-slate-700');
             });
-            event.currentTarget.classList.remove('bg-cyber-850', 'text-slate-300');
-            event.currentTarget.classList.add('bg-cyan-500', 'text-slate-950');
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.remove('bg-white', 'text-slate-700');
+                event.currentTarget.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-500/20');
+            }
             renderServices();
         }
 
@@ -1027,39 +1321,38 @@
             if (!currentCart) return;
 
             if (currentCart.isCareSubscription) {
-                // CARE SUBSCRIPTION SCHEDULING (NO 60-MIN EXPRESS DISPATCH)
-                drawerTitle.innerHTML = `<i class="fa-solid fa-calendar-check text-amber-400"></i> Care & Subscription Booking`;
+                drawerTitle.innerHTML = `<i class="fa-solid fa-calendar-check text-blue-400"></i> Care & Subscription Booking`;
                 drawerSub.innerText = "Structured trial, interview & monthly care plan";
-                slaNote.innerHTML = `<i class="fa-solid fa-user-shield text-amber-400 mr-1"></i> Background checked caregiver with replacement guarantee.`;
+                slaNote.innerHTML = `<i class="fa-solid fa-user-shield text-blue-600 mr-1"></i> Background checked caregiver with free replacement guarantee.`;
 
                 container.innerHTML = `
-                    <h3 class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center justify-between">
+                    <h3 class="text-xs font-black text-indigo-700 uppercase tracking-wider flex items-center justify-between">
                         <span>2. Care Start & Interview Preference</span>
-                        <span class="text-[10px] text-amber-400 font-bold bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20">📅 SCHEDULED VISIT</span>
+                        <span class="text-[10px] text-indigo-700 font-extrabold bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">📅 SCHEDULED VISIT</span>
                     </h3>
 
                     <div class="space-y-2">
-                        <label class="flex items-start gap-3 p-3 bg-cyber-900 border-2 border-amber-400/80 rounded-2xl cursor-pointer hover:bg-cyber-850 transition">
-                            <input type="radio" name="careSlotType" value="interview_tomorrow" checked onchange="toggleCareSlotType()" class="mt-0.5 text-amber-400 focus:ring-amber-400">
+                        <label class="flex items-start gap-3 p-3.5 bg-white border-2 border-indigo-600 rounded-2xl cursor-pointer shadow-xs">
+                            <input type="radio" name="careSlotType" value="interview_tomorrow" checked onchange="toggleCareSlotType()" class="mt-0.5 text-blue-600 focus:ring-blue-600">
                             <div class="space-y-0.5 flex-1">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-xs font-black text-white flex items-center gap-1">
-                                        <i class="fa-solid fa-user-clock text-amber-400"></i> In-Person Interview / Visit Tomorrow
+                                    <span class="text-xs font-black text-slate-900 flex items-center gap-1">
+                                        <i class="fa-solid fa-user-clock text-indigo-600"></i> In-Person Interview / Visit Tomorrow
                                     </span>
-                                    <span class="text-[9px] font-black bg-amber-400 text-slate-950 px-2 py-0.5 rounded">RECOMMENDED</span>
+                                    <span class="text-[9px] font-black bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded">RECOMMENDED</span>
                                 </div>
-                                <p class="text-[11px] font-bold text-amber-300">Staff Visit / Interview tomorrow at 08:00 AM</p>
-                                <p class="text-[10px] text-slate-400">Meet specialist before confirming monthly recurring shift</p>
+                                <p class="text-[11px] font-bold text-indigo-700">Staff Visit / Interview tomorrow at 08:00 AM</p>
+                                <p class="text-[10px] text-slate-500">Meet specialist before confirming monthly recurring shift</p>
                             </div>
                         </label>
 
-                        <label class="flex items-start gap-3 p-3 bg-cyber-900 border border-slate-800 rounded-2xl cursor-pointer hover:bg-cyber-850 transition">
-                            <input type="radio" name="careSlotType" value="custom_date" onchange="toggleCareSlotType()" class="mt-0.5 text-amber-400 focus:ring-amber-400">
+                        <label class="flex items-start gap-3 p-3.5 bg-white border border-slate-200 rounded-2xl cursor-pointer hover:bg-slate-50 transition">
+                            <input type="radio" name="careSlotType" value="custom_date" onchange="toggleCareSlotType()" class="mt-0.5 text-blue-600 focus:ring-blue-600">
                             <div class="space-y-1 flex-1">
-                                <span class="text-xs font-bold text-slate-300">Pick Custom Start Date & Time</span>
+                                <span class="text-xs font-bold text-slate-800">Pick Custom Start Date & Time</span>
                                 <div id="careCustomDateInputs" class="hidden grid-cols-2 gap-2 pt-1">
-                                    <input type="date" id="custDate" class="w-full px-2 py-1.5 text-xs bg-cyber-950 border border-slate-800 rounded-xl text-white">
-                                    <select id="custTime" class="w-full px-2 py-1.5 text-xs bg-cyber-950 border border-slate-800 rounded-xl text-white">
+                                    <input type="date" id="custDate" class="w-full px-2 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800">
+                                    <select id="custTime" class="w-full px-2 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800">
                                         <option value="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</option>
                                         <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
                                         <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
@@ -1071,40 +1364,39 @@
                     </div>
                 `;
             } else {
-                // ON-DEMAND REPAIR / CLEANING (INCLUDES 60-MIN EXPRESS OPTION)
                 const expressTime = getFutureTimeFormatted(60);
-                drawerTitle.innerHTML = `<i class="fa-solid fa-bolt text-cyan-400"></i> Express Service Checkout`;
+                drawerTitle.innerHTML = `<i class="fa-solid fa-bolt text-blue-400"></i> Express Service Checkout`;
                 drawerSub.innerText = "Instant doorstep technician dispatch";
-                slaNote.innerHTML = `<i class="fa-solid fa-shield-halved text-cyan-400 mr-1"></i> Guaranteed arrival within 60 minutes of payment confirmation.`;
+                slaNote.innerHTML = `<i class="fa-solid fa-shield-halved text-blue-600 mr-1"></i> Guaranteed arrival within 60 minutes of payment confirmation.`;
 
                 container.innerHTML = `
-                    <h3 class="text-xs font-black text-cyan-400 uppercase tracking-wider flex items-center justify-between">
+                    <h3 class="text-xs font-black text-blue-600 uppercase tracking-wider flex items-center justify-between">
                         <span>2. Arrival Slot Selection</span>
-                        <span class="text-[10px] text-cyan-400 font-bold bg-cyan-400/10 px-2 py-0.5 rounded border border-cyan-400/20">⚡ 60-MIN EXPRESS ACTIVE</span>
+                        <span class="text-[10px] text-blue-700 font-extrabold bg-blue-50 px-2 py-0.5 rounded border border-blue-200">⚡ 60-MIN EXPRESS ACTIVE</span>
                     </h3>
 
                     <div class="space-y-2">
-                        <label class="flex items-start gap-3 p-3 bg-cyber-900 border-2 border-cyan-500/80 rounded-2xl cursor-pointer hover:bg-cyber-850 transition">
-                            <input type="radio" name="expressSlotType" value="express" checked onchange="toggleExpressSlotType()" class="mt-0.5 text-cyan-500 focus:ring-cyan-500">
+                        <label class="flex items-start gap-3 p-3.5 bg-white border-2 border-blue-600 rounded-2xl cursor-pointer shadow-xs">
+                            <input type="radio" name="expressSlotType" value="express" checked onchange="toggleExpressSlotType()" class="mt-0.5 text-blue-600 focus:ring-blue-600">
                             <div class="space-y-0.5 flex-1">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-xs font-black text-white flex items-center gap-1">
-                                        <i class="fa-solid fa-bolt text-amber-400"></i> Express 60-Min Arrival
+                                    <span class="text-xs font-black text-slate-900 flex items-center gap-1">
+                                        <i class="fa-solid fa-bolt text-amber-500"></i> Express 60-Min Arrival
                                     </span>
-                                    <span class="text-[9px] font-black bg-cyan-500 text-slate-950 px-2 py-0.5 rounded">FASTEST</span>
+                                    <span class="text-[9px] font-black bg-blue-600 text-white px-2 py-0.5 rounded">FASTEST</span>
                                 </div>
-                                <p class="text-[11px] font-bold text-cyan-300">Technician arrives by ${expressTime}</p>
-                                <p class="text-[10px] text-slate-400">Immediate specialist dispatch upon payment verification</p>
+                                <p class="text-[11px] font-bold text-blue-600">Technician arrives by ${expressTime}</p>
+                                <p class="text-[10px] text-slate-500">Immediate specialist dispatch upon payment verification</p>
                             </div>
                         </label>
 
-                        <label class="flex items-start gap-3 p-3 bg-cyber-900 border border-slate-800 rounded-2xl cursor-pointer hover:bg-cyber-850 transition">
-                            <input type="radio" name="expressSlotType" value="schedule" onchange="toggleExpressSlotType()" class="mt-0.5 text-cyan-500 focus:ring-cyan-500">
+                        <label class="flex items-start gap-3 p-3.5 bg-white border border-slate-200 rounded-2xl cursor-pointer hover:bg-slate-50 transition">
+                            <input type="radio" name="expressSlotType" value="schedule" onchange="toggleExpressSlotType()" class="mt-0.5 text-blue-600 focus:ring-blue-600">
                             <div class="space-y-1 flex-1">
-                                <span class="text-xs font-bold text-slate-300">Schedule For Later Slot</span>
+                                <span class="text-xs font-bold text-slate-800">Schedule For Later Slot</span>
                                 <div id="expressScheduledInputs" class="hidden grid-cols-2 gap-2 pt-1">
-                                    <input type="date" id="custDate" class="w-full px-2 py-1.5 text-xs bg-cyber-950 border border-slate-800 rounded-xl text-white">
-                                    <select id="custTime" class="w-full px-2 py-1.5 text-xs bg-cyber-950 border border-slate-800 rounded-xl text-white">
+                                    <input type="date" id="custDate" class="w-full px-2 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800">
+                                    <select id="custTime" class="w-full px-2 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800">
                                         <option value="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</option>
                                         <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
                                         <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
@@ -1160,16 +1452,16 @@
             summaryBox.innerHTML = `
                 <div class="flex justify-between items-start">
                     <div>
-                        <span class="text-[9px] font-black uppercase tracking-wider ${isCare ? 'text-amber-400 bg-amber-400/10 border-amber-400/20' : 'text-cyan-400 bg-cyan-500/10 border-cyan-500/20'} px-2 py-0.5 rounded border">
+                        <span class="text-[9px] font-black uppercase tracking-wider ${isCare ? 'text-amber-800 bg-amber-100 border-amber-300' : 'text-blue-700 bg-blue-100 border-blue-200'} px-2.5 py-0.5 rounded-full border">
                             ${isCare ? '📅 Care Subscription' : '⚡ 60-Min Express'}
                         </span>
-                        <h4 class="font-extrabold text-white text-sm mt-1">${currentCart.title}</h4>
-                        <p class="text-xs font-medium text-slate-300">${currentCart.optionName}</p>
-                        <p class="text-[10px] ${isCare ? 'text-amber-400' : 'text-cyan-400'} mt-0.5 font-bold">
+                        <h4 class="font-extrabold text-slate-900 text-sm mt-1.5">${currentCart.title}</h4>
+                        <p class="text-xs font-semibold text-slate-600">${currentCart.optionName}</p>
+                        <p class="text-[10px] ${isCare ? 'text-amber-700' : 'text-blue-600'} mt-0.5 font-bold">
                             ${isCare ? '📅 Background verified & identity matched specialist' : '⚡ Guaranteed doorstep arrival within 60 mins'}
                         </p>
                     </div>
-                    <span class="text-base font-black text-white">₹${currentCart.basePrice.toLocaleString('en-IN')}</span>
+                    <span class="text-base font-black text-slate-900">₹${currentCart.basePrice.toLocaleString('en-IN')}</span>
                 </div>
             `;
 
@@ -1192,13 +1484,13 @@
 
             ctx.fillStyle = "#ffffff";
             ctx.fillRect(0, 0, 112, 112);
-            ctx.fillStyle = "#070a12";
+            ctx.fillStyle = "#0f172a";
             
             function drawFinder(x, y) {
                 ctx.fillRect(x, y, 28, 28);
                 ctx.fillStyle = "#ffffff";
                 ctx.fillRect(x + 4, y + 4, 20, 20);
-                ctx.fillStyle = "#070a12";
+                ctx.fillStyle = "#0f172a";
                 ctx.fillRect(x + 8, y + 8, 12, 12);
             }
 
@@ -1344,6 +1636,7 @@
         function updateBookingsUI() {
             const list = document.getElementById('bookingsList');
             const badge = document.getElementById('bookingBadge');
+            if (!list) return;
 
             if (myBookings.length > 0) {
                 badge.classList.remove('hidden');
@@ -1355,13 +1648,13 @@
 
             if (myBookings.length === 0) {
                 list.innerHTML = `
-                    <div class="glass-card rounded-3xl p-12 text-center space-y-3">
-                        <div class="w-16 h-16 bg-cyber-900 rounded-full flex items-center justify-center mx-auto text-slate-500 text-xl border border-slate-800">
+                    <div class="light-card rounded-3xl p-12 text-center space-y-3">
+                        <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-400 text-xl">
                             <i class="fa-solid fa-calendar-xmark"></i>
                         </div>
-                        <h3 class="text-base font-bold text-white">No Active Service Bookings</h3>
-                        <p class="text-xs text-slate-400 max-w-sm mx-auto">Book maid, babysitter, caretaker, or doorstep repair to track status here.</p>
-                        <button onclick="switchTab('services')" class="px-4 py-2 bg-cyan-500 text-slate-950 rounded-xl text-xs font-bold transition hover:bg-cyan-400">
+                        <h3 class="text-base font-bold text-slate-800">No Active Service Bookings</h3>
+                        <p class="text-xs text-slate-500 max-w-sm mx-auto">Book maid, babysitter, caretaker, or doorstep repair to track status here.</p>
+                        <button onclick="switchTab('services')" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold transition hover:bg-blue-700">
                             Explore Services
                         </button>
                     </div>
@@ -1370,66 +1663,66 @@
             }
 
             list.innerHTML = myBookings.map(b => `
-                <div class="glass-card rounded-3xl p-6 shadow-xl space-y-5 border ${b.isCareSubscription ? 'border-amber-400/40' : 'border-cyan-500/30'} relative overflow-hidden">
+                <div class="light-card rounded-3xl p-6 shadow-sm space-y-5 border ${b.isCareSubscription ? 'border-amber-300' : 'border-blue-200'} relative overflow-hidden">
                     
                     <!-- Header -->
-                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
                         <div>
                             <div class="flex items-center gap-2">
-                                <span class="px-3 py-1 rounded-full text-xs font-black ${b.isCareSubscription ? 'bg-amber-400/20 text-amber-300 border-amber-400/40' : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'} border flex items-center gap-1">
-                                    <i class="fa-solid ${b.isCareSubscription ? 'fa-calendar-check text-amber-400' : 'fa-bolt text-cyan-400'}"></i> ${b.status}
+                                <span class="px-3 py-1 rounded-full text-xs font-black ${b.isCareSubscription ? 'bg-amber-100 text-amber-800 border-amber-300' : 'bg-blue-50 text-blue-700 border-blue-200'} border flex items-center gap-1.5">
+                                    <i class="fa-solid ${b.isCareSubscription ? 'fa-calendar-check text-amber-600' : 'fa-bolt text-blue-600'}"></i> ${b.status}
                                 </span>
                                 <span class="text-xs font-mono font-bold text-slate-400">Order #${b.id}</span>
                             </div>
-                            <h4 class="text-lg font-black text-white mt-1">${b.serviceTitle}</h4>
-                            <p class="text-xs text-slate-300 font-medium">${b.optionName}</p>
+                            <h4 class="text-lg font-black text-slate-900 mt-1">${b.serviceTitle}</h4>
+                            <p class="text-xs text-slate-600 font-medium">${b.optionName}</p>
                         </div>
 
                         <div class="text-right">
                             <span class="text-[10px] uppercase font-bold text-slate-400 block">AMOUNT PAID</span>
-                            <span class="text-2xl font-black text-cyan-400">₹${b.totalAmount.toLocaleString('en-IN')}</span>
+                            <span class="text-2xl font-black text-blue-600">₹${b.totalAmount.toLocaleString('en-IN')}</span>
                         </div>
                     </div>
 
-                    <!-- Schedule & Address Details -->
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-cyber-950 p-4 rounded-2xl border border-slate-800">
+                    <!-- Details Card -->
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
                         <div class="md:col-span-6 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-2xl bg-cyber-850 flex items-center justify-center shrink-0 border border-slate-800 text-cyan-400 text-lg">
+                            <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shrink-0 border border-slate-200 text-blue-600 text-lg shadow-xs">
                                 <i class="fa-solid ${b.isCareSubscription ? 'fa-calendar-day' : 'fa-stopwatch'}"></i>
                             </div>
                             <div>
-                                <span class="text-[10px] font-black text-amber-400 uppercase tracking-widest block">${b.scheduleType}</span>
-                                <h5 class="text-xs font-bold text-white">${b.targetTime}</h5>
-                                <p class="text-[11px] text-slate-400 line-clamp-1">${b.address}</p>
+                                <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest block">${b.scheduleType}</span>
+                                <h5 class="text-xs font-bold text-slate-900">${b.targetTime}</h5>
+                                <p class="text-[11px] text-slate-500 line-clamp-1">${b.address}</p>
                             </div>
                         </div>
 
-                        <div class="md:col-span-6 flex items-center justify-end gap-3 border-t md:border-t-0 pt-3 md:pt-0 border-slate-800">
-                            <div class="bg-cyber-900 px-3.5 py-2 rounded-xl border border-slate-800 text-center">
-                                <span class="text-[9px] text-slate-500 uppercase font-bold block">START JOB OTP</span>
-                                <span class="font-mono text-base font-black text-amber-400 tracking-wider">${b.jobOtp}</span>
+                        <div class="md:col-span-6 flex items-center justify-end gap-3 border-t md:border-t-0 pt-3 md:pt-0 border-slate-200">
+                            <div class="bg-white px-4 py-2 rounded-xl border border-slate-200 text-center shadow-xs">
+                                <span class="text-[9px] text-slate-400 uppercase font-black block">START JOB OTP</span>
+                                <span class="font-mono text-base font-black text-blue-600 tracking-wider">${b.jobOtp}</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Specialist Card -->
+                    <!-- Specialist Info -->
                     <div class="flex flex-wrap items-center justify-between gap-4 pt-1">
                         <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-2xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 flex items-center justify-center font-black text-lg">
+                            <div class="w-11 h-11 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center font-black text-lg">
                                 <i class="fa-solid fa-user-gear"></i>
                             </div>
                             <div>
                                 <span class="text-[10px] text-slate-400 font-bold block">ASSIGNED PROFESSIONAL</span>
-                                <h5 class="text-xs font-bold text-white flex items-center gap-1">
+                                <h5 class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
                                     <span>${b.specialistName}</span>
-                                    <span class="text-amber-400 text-[10px]">${b.specialistRating}</span>
+                                    <span class="text-amber-500 text-[10px]">${b.specialistRating}</span>
                                 </h5>
-                                <a href="tel:${b.specialistPhone}" class="text-[11px] font-bold text-cyan-400 hover:underline"><i class="fa-solid fa-phone text-[10px] mr-1"></i>${b.specialistPhone}</a>
+                                <a href="tel:${b.specialistPhone}" class="text-[11px] font-bold text-blue-600 hover:underline"><i class="fa-solid fa-phone text-[10px] mr-1"></i>${b.specialistPhone}</a>
                             </div>
                         </div>
 
-                        <button onclick="openSupportForOrder('${b.id}')" class="px-3.5 py-2.5 bg-cyber-850 hover:bg-cyber-800 text-cyan-400 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-slate-800">
-                            <i class="fa-solid fa-headset"></i> Support Desk
+                        <button onclick="openSupportForOrder('${b.id}')" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-slate-200">
+                            <i class="fa-solid fa-headset text-blue-600"></i> Support Desk
                         </button>
                     </div>
 
@@ -1437,7 +1730,59 @@
             `).join('');
         }
 
-        // AI ASSISTANT LOGIC
+        // VENDOR PORTAL FUNCTIONS
+        function renderVendorRequestsFeed() {
+            const feed = document.getElementById('vendorRequestsFeed');
+            if (!feed) return;
+
+            feed.innerHTML = VENDOR_REQUESTS.map((req, idx) => `
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-black text-slate-900">${req.title}</span>
+                            <span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded">${req.distance}</span>
+                        </div>
+                        <p class="text-slate-500 font-medium text-[11px] mt-0.5"><i class="fa-solid fa-location-dot text-slate-400 mr-1"></i>${req.location}</p>
+                        <p class="text-blue-600 font-bold text-[10px] mt-0.5">${req.time}</p>
+                    </div>
+
+                    <div class="flex items-center gap-3 shrink-0">
+                        <span class="text-sm font-black text-emerald-600">${req.payout}</span>
+                        <button onclick="acceptVendorJob(${idx})" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition text-xs shadow-xs">
+                            Accept Job
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function acceptVendorJob(index) {
+            const req = VENDOR_REQUESTS[index];
+            document.getElementById('vendorActiveJobTitle').innerText = req.title;
+            document.getElementById('vendorActiveCustomer').innerText = `Client Location: ${req.location}`;
+            document.getElementById('vendorActiveEarnings').innerText = `Payout: ${req.payout} (Paid via UPI)`;
+            showToast(`Accepted ${req.title}! Check active job OTP panel.`);
+        }
+
+        function verifyVendorOtp() {
+            const otpVal = document.getElementById('vendorOtpInput').value.trim();
+            if (!otpVal) {
+                showToast("Please enter client Job OTP!");
+                return;
+            }
+            if (otpVal === "4829") {
+                showToast("OTP Verified Successfully! Job started.");
+            } else {
+                showToast("Incorrect OTP! Please ask client for 4-digit code.");
+            }
+        }
+
+        function handlePartnerRegister(e) {
+            e.preventDefault();
+            showToast("Partner profile & service preferences updated!");
+        }
+
+        // AI ASSISTANT FUNCTIONS
         function populateSupportOrdersDropdown() {
             const select = document.getElementById('supportOrderSelect');
             if (!select) return;
@@ -1502,8 +1847,8 @@
         function appendUserMessage(msg) {
             const chatBox = document.getElementById('chatBox');
             const userHtml = `
-                <div class="flex items-start justify-end gap-2.5 max-w-[85%] ml-auto">
-                    <div class="bg-gradient-to-tr from-cyan-500 to-indigo-600 text-slate-950 font-semibold p-3.5 rounded-2xl rounded-tr-none text-xs shadow-md">
+                <div class="flex items-start justify-end gap-3 max-w-[85%] ml-auto">
+                    <div class="bg-blue-600 text-white font-semibold p-4 rounded-2xl rounded-tr-none text-xs shadow-md">
                         ${msg}
                     </div>
                 </div>
@@ -1520,11 +1865,11 @@
                 typing.classList.add('hidden');
                 const chatBox = document.getElementById('chatBox');
                 const aiHtml = `
-                    <div class="flex items-start gap-2.5 max-w-[85%]">
-                        <div class="w-7 h-7 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0 text-xs mt-0.5 border border-cyan-500/30">
+                    <div class="flex items-start gap-3 max-w-[85%]">
+                        <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 text-xs mt-0.5 border border-blue-200">
                             <i class="fa-solid fa-robot"></i>
                         </div>
-                        <div class="bg-cyber-850 p-3.5 rounded-2xl rounded-tl-none border border-slate-800 text-xs space-y-2 text-slate-200">
+                        <div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-200 shadow-xs text-xs space-y-2 text-slate-700">
                             <p>${replyText}</p>
                         </div>
                     </div>
@@ -1554,11 +1899,11 @@
         function resetAiChat() {
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = `
-                <div class="flex items-start gap-2.5 max-w-[85%]">
-                    <div class="w-7 h-7 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0 text-xs mt-0.5 border border-cyan-500/30">
+                <div class="flex items-start gap-3 max-w-[85%]">
+                    <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 text-xs mt-0.5 border border-blue-200">
                         <i class="fa-solid fa-robot"></i>
                     </div>
-                    <div class="bg-cyber-850 p-3.5 rounded-2xl rounded-tl-none border border-slate-800 text-xs space-y-2 text-slate-200">
+                    <div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-200 shadow-xs text-xs space-y-2 text-slate-700">
                         <p>
                             Chat session reset! 👋 How can I assist you with your home services or care subscriptions?
                         </p>
@@ -1568,11 +1913,10 @@
             showToast("AI Chat reset");
         }
 
-        // TABS SWITCHING
         function switchTab(tab) {
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('text-cyan-400', 'bg-cyan-500/10', 'border', 'border-cyan-500/20');
-                btn.classList.add('text-slate-300');
+                btn.classList.remove('text-blue-600', 'bg-blue-50', 'border', 'border-blue-200');
+                btn.classList.add('text-slate-600');
             });
 
             document.getElementById('tab-services').classList.add('hidden');
@@ -1581,14 +1925,14 @@
 
             if (tab === 'services') {
                 document.getElementById('tab-services').classList.remove('hidden');
-                document.getElementById('nav-services').classList.add('text-cyan-400', 'bg-cyan-500/10', 'border', 'border-cyan-500/20');
+                document.getElementById('nav-services').classList.add('text-blue-600', 'bg-blue-50', 'border', 'border-blue-200');
             } else if (tab === 'bookings') {
                 document.getElementById('tab-bookings').classList.remove('hidden');
-                document.getElementById('nav-bookings').classList.add('text-cyan-400', 'bg-cyan-500/10', 'border', 'border-cyan-500/20');
+                document.getElementById('nav-bookings').classList.add('text-blue-600', 'bg-blue-50', 'border', 'border-blue-200');
                 updateBookingsUI();
             } else if (tab === 'help') {
                 document.getElementById('tab-help').classList.remove('hidden');
-                document.getElementById('nav-help').classList.add('text-cyan-400', 'bg-cyan-500/10', 'border', 'border-cyan-500/20');
+                document.getElementById('nav-help').classList.add('text-blue-600', 'bg-blue-50', 'border', 'border-blue-200');
             }
         }
 
