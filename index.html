@@ -1963,3 +1963,61 @@
     </script>
 </body>
 </html>
+// ==========================================
+// REAL-TIME CROSS-TAB SYNC FOR VENDORS & CUSTOMERS
+// ==========================================
+
+// 1. Listen for storage events triggered across tabs
+window.addEventListener('storage', (event) => {
+  // Check if a customer placed a new booking
+  if (event.key === 'quickfix_bookings' || event.key === 'quickfix_active_order') {
+    const activeOrder = JSON.parse(localStorage.getItem('quickfix_active_order'));
+    
+    // If we are currently on the Vendor Portal, refresh the job feed live
+    if (activeOrder && typeof renderVendorJobFeed === 'function') {
+      renderVendorJobFeed();
+      showVendorNotification(`⚡ New Job Request: ${activeOrder.serviceName} (${activeOrder.address})`);
+    }
+  }
+
+  // Check if a vendor accepted a job
+  if (event.key === 'quickfix_job_accepted') {
+    const acceptedData = JSON.parse(localStorage.getItem('quickfix_job_accepted'));
+    
+    // If we are on the Customer Portal, update the live tracker status instantly
+    if (acceptedData && typeof updateCustomerTrackerStatus === 'function') {
+      updateCustomerTrackerStatus(acceptedData);
+    }
+  }
+});
+
+// 2. Helper function to show live pop-up toast on the Vendor Dashboard
+function showVendorNotification(message) {
+  const toast = document.createElement('div');
+  toast.className = 'fixed bottom-5 right-5 bg-indigo-600 text-white px-5 py-3 rounded-xl shadow-2xl z-50 flex items-center space-x-3 border border-indigo-400 animate-bounce';
+  toast.innerHTML = `
+    <i class="fa-solid fa-bell text-amber-300"></i>
+    <span class="text-sm font-semibold">${message}</span>
+  `;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 5000);
+}
+
+// 3. Update Vendor Accept Action to trigger cross-tab notification
+function acceptJobByVendor(orderId) {
+  const activeOrder = JSON.parse(localStorage.getItem('quickfix_active_order')) || {};
+  activeOrder.status = 'Partner Assigned';
+  activeOrder.partnerName = 'Vikram Sharma';
+  activeOrder.partnerPhone = '+91 98765 43210';
+  
+  // Save updated order and trigger storage event
+  localStorage.setItem('quickfix_active_order', JSON.stringify(activeOrder));
+  localStorage.setItem('quickfix_job_accepted', JSON.stringify({
+    orderId: orderId,
+    timestamp: new Date().getTime(),
+    partnerName: 'Vikram Sharma'
+  }));
+
+  alert('Job Accepted! Navigating to active job verification...');
+  renderVendorDashboard();
+}
