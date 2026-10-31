@@ -1079,7 +1079,7 @@
         // APP STATE
         let activeRole = 'customer'; // 'customer' or 'vendor'
         let currentCart = null;
-        let myBookings = [
+        let myBookings = JSON.parse(localStorage.getItem('quickfix_bookings')) || [
             {
                 id: 'QF-1088',
                 serviceTitle: 'House Maid (Subscription)',
@@ -1110,7 +1110,42 @@
             renderVendorRequestsFeed();
             updateLiveTimeDisplays();
             setInterval(updateLiveTimeDisplays, 30000);
+            setupCrossTabSync();
         });
+
+        // REAL-TIME CROSS-TAB SYNC LISTENER
+        function setupCrossTabSync() {
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'quickfix_bookings' || event.key === 'quickfix_active_order') {
+                    // Update bookings array from storage
+                    const storedBookings = localStorage.getItem('quickfix_bookings');
+                    if (storedBookings) {
+                        myBookings = JSON.parse(storedBookings);
+                        updateBookingsUI();
+                        populateSupportOrdersDropdown();
+                        renderVendorRequestsFeed();
+                    }
+                    if (activeRole === 'vendor') {
+                        showToast("⚡ New Job Request Received from Customer!");
+                    }
+                }
+
+                if (event.key === 'quickfix_job_accepted') {
+                    const acceptedPayload = JSON.parse(localStorage.getItem('quickfix_job_accepted'));
+                    if (acceptedPayload) {
+                        const storedBookings = localStorage.getItem('quickfix_bookings');
+                        if (storedBookings) {
+                            myBookings = JSON.parse(storedBookings);
+                            updateBookingsUI();
+                            populateSupportOrdersDropdown();
+                        }
+                        if (activeRole === 'customer') {
+                            showToast(`🎉 Specialist ${acceptedPayload.partnerName} has ACCEPTED your booking #${acceptedPayload.orderId}!`);
+                        }
+                    }
+                }
+            });
+        }
 
         // ROLE SELECTION HANDLERS
         function selectRole(role) {
@@ -1601,17 +1636,23 @@
                 scheduleDate: scheduleDateLabel,
                 scheduleTime: scheduleTimeLabel,
                 targetTime: `${scheduleDateLabel} (${scheduleTimeLabel})`,
-                specialistName: currentCart.isCareSubscription ? 'Sunita Sharma (Verified Care Specialist)' : 'Vikram Sharma (Technician)',
+                specialistName: 'Searching Nearby Partner...',
                 specialistPhone: '+91 98123 45678',
                 specialistRating: '4.9 ★',
                 jobOtp: randomOtp,
-                status: currentCart.isCareSubscription ? 'Caregiver Assigned & Interview Scheduled' : 'Technician Dispatched',
+                status: 'Awaiting Partner Acceptance',
                 timestamp: new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })
             };
 
             myBookings.unshift(newBooking);
+            
+            // Broadcast via localStorage
+            localStorage.setItem('quickfix_bookings', JSON.stringify(myBookings));
+            localStorage.setItem('quickfix_active_order', JSON.stringify(newBooking));
+
             updateBookingsUI();
             populateSupportOrdersDropdown();
+            renderVendorRequestsFeed();
 
             document.getElementById('receiptOrderId').innerText = `#${orderId}`;
             document.getElementById('receiptServiceName').innerText = `${currentCart.title} (${currentCart.optionName})`;
@@ -1622,7 +1663,7 @@
 
             closeCartDrawer();
             document.getElementById('receiptModal').classList.remove('hidden');
-            showToast("Payment confirmed! Booking successfully logged.");
+            showToast("Payment confirmed! Booking sent to nearby specialists.");
             
             currentCart = null;
             document.getElementById('cartBadge').innerText = '0';
@@ -1735,12 +1776,38 @@
             const feed = document.getElementById('vendorRequestsFeed');
             if (!feed) return;
 
-            feed.innerHTML = VENDOR_REQUESTS.map((req, idx) => `
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+            // Combine active customer orders + mock static requests
+            let allRequests = [];
+
+            // Filter real customer orders awaiting partner acceptance
+            const liveCustomerJobs = myBookings.map((b, idx) => ({
+                id: b.id,
+                title: `${b.serviceTitle} (${b.optionName})`,
+                distance: '1.4 km away (Live Customer)',
+                payout: `₹${Math.round(b.totalAmount * 0.85).toLocaleString('en-IN')}`,
+                location: b.address,
+                time: b.targetTime,
+                isRealCustomerOrder: true,
+                orderIndex: idx
+            }));
+
+            allRequests = [...liveCustomerJobs, ...VENDOR_REQUESTS];
+
+            if (allRequests.length === 0) {
+                feed.innerHTML = `
+                    <div class="text-center py-8 text-slate-400 text-xs font-bold">
+                        No pending job requests in your pincode right now.
+                    </div>
+                `;
+                return;
+            }
+
+            feed.innerHTML = allRequests.map((req, idx) => `
+                <div class="bg-slate-50 p-4 rounded-2xl border ${req.isRealCustomerOrder ? 'border-blue-300 bg-blue-50/30' : 'border-slate-200'} flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
                     <div>
                         <div class="flex items-center gap-2">
                             <span class="font-black text-slate-900">${req.title}</span>
-                            <span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded">${req.distance}</span>
+                            <span class="${req.isRealCustomerOrder ? 'bg-blue-600 text-white font-black' : 'bg-emerald-100 text-emerald-800 font-bold'} text-[9px] px-2 py-0.5 rounded">${req.distance}</span>
                         </div>
                         <p class="text-slate-500 font-medium text-[11px] mt-0.5"><i class="fa-solid fa-location-dot text-slate-400 mr-1"></i>${req.location}</p>
                         <p class="text-blue-600 font-bold text-[10px] mt-0.5">${req.time}</p>
@@ -1748,7 +1815,7 @@
 
                     <div class="flex items-center gap-3 shrink-0">
                         <span class="text-sm font-black text-emerald-600">${req.payout}</span>
-                        <button onclick="acceptVendorJob(${idx})" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition text-xs shadow-xs">
+                        <button onclick="acceptVendorJob('${req.id}', ${req.isRealCustomerOrder ? req.orderIndex : -1})" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition text-xs shadow-xs">
                             Accept Job
                         </button>
                     </div>
@@ -1756,12 +1823,40 @@
             `).join('');
         }
 
-        function acceptVendorJob(index) {
-            const req = VENDOR_REQUESTS[index];
-            document.getElementById('vendorActiveJobTitle').innerText = req.title;
-            document.getElementById('vendorActiveCustomer').innerText = `Client Location: ${req.location}`;
-            document.getElementById('vendorActiveEarnings').innerText = `Payout: ${req.payout} (Paid via UPI)`;
-            showToast(`Accepted ${req.title}! Check active job OTP panel.`);
+        function acceptVendorJob(reqId, orderIndex) {
+            let acceptedTitle = "Service Job";
+
+            if (orderIndex >= 0 && myBookings[orderIndex]) {
+                // Update customer booking
+                myBookings[orderIndex].status = "Partner Assigned & En Route";
+                myBookings[orderIndex].specialistName = "Vikram Sharma (Verified Partner)";
+                myBookings[orderIndex].specialistPhone = "+91 98123 45678";
+                acceptedTitle = myBookings[orderIndex].serviceTitle;
+
+                document.getElementById('vendorActiveJobTitle').innerText = `${myBookings[orderIndex].serviceTitle} (${myBookings[orderIndex].optionName})`;
+                document.getElementById('vendorActiveCustomer').innerText = `Client: ${myBookings[orderIndex].customerName} • ${myBookings[orderIndex].address}`;
+                document.getElementById('vendorActiveEarnings').innerText = `Payout: ₹${Math.round(myBookings[orderIndex].totalAmount * 0.85).toLocaleString('en-IN')} (Paid via UPI)`;
+
+                // Broadcast acceptance event via localStorage
+                localStorage.setItem('quickfix_bookings', JSON.stringify(myBookings));
+                localStorage.setItem('quickfix_job_accepted', JSON.stringify({
+                    orderId: myBookings[orderIndex].id,
+                    partnerName: "Vikram Sharma",
+                    timestamp: new Date().getTime()
+                }));
+            } else {
+                const req = VENDOR_REQUESTS.find(r => r.id === reqId);
+                if (req) {
+                    acceptedTitle = req.title;
+                    document.getElementById('vendorActiveJobTitle').innerText = req.title;
+                    document.getElementById('vendorActiveCustomer').innerText = `Client Location: ${req.location}`;
+                    document.getElementById('vendorActiveEarnings').innerText = `Payout: ${req.payout} (Paid via UPI)`;
+                }
+            }
+
+            renderVendorRequestsFeed();
+            updateBookingsUI();
+            showToast(`Accepted ${acceptedTitle}! Client notified on Customer Portal.`);
         }
 
         function verifyVendorOtp() {
@@ -1770,10 +1865,13 @@
                 showToast("Please enter client Job OTP!");
                 return;
             }
-            if (otpVal === "4829") {
-                showToast("OTP Verified Successfully! Job started.");
+            // Check if OTP matches any active booking or default 4829
+            const matchesBooking = myBookings.some(b => b.jobOtp === otpVal) || otpVal === "4829";
+            
+            if (matchesBooking) {
+                showToast("✅ OTP Verified Successfully! Job execution started.");
             } else {
-                showToast("Incorrect OTP! Please ask client for 4-digit code.");
+                showToast("❌ Incorrect OTP! Please ask customer for their 4-digit Job OTP.");
             }
         }
 
@@ -1963,61 +2061,3 @@
     </script>
 </body>
 </html>
-// ==========================================
-// REAL-TIME CROSS-TAB SYNC FOR VENDORS & CUSTOMERS
-// ==========================================
-
-// 1. Listen for storage events triggered across tabs
-window.addEventListener('storage', (event) => {
-  // Check if a customer placed a new booking
-  if (event.key === 'quickfix_bookings' || event.key === 'quickfix_active_order') {
-    const activeOrder = JSON.parse(localStorage.getItem('quickfix_active_order'));
-    
-    // If we are currently on the Vendor Portal, refresh the job feed live
-    if (activeOrder && typeof renderVendorJobFeed === 'function') {
-      renderVendorJobFeed();
-      showVendorNotification(`⚡ New Job Request: ${activeOrder.serviceName} (${activeOrder.address})`);
-    }
-  }
-
-  // Check if a vendor accepted a job
-  if (event.key === 'quickfix_job_accepted') {
-    const acceptedData = JSON.parse(localStorage.getItem('quickfix_job_accepted'));
-    
-    // If we are on the Customer Portal, update the live tracker status instantly
-    if (acceptedData && typeof updateCustomerTrackerStatus === 'function') {
-      updateCustomerTrackerStatus(acceptedData);
-    }
-  }
-});
-
-// 2. Helper function to show live pop-up toast on the Vendor Dashboard
-function showVendorNotification(message) {
-  const toast = document.createElement('div');
-  toast.className = 'fixed bottom-5 right-5 bg-indigo-600 text-white px-5 py-3 rounded-xl shadow-2xl z-50 flex items-center space-x-3 border border-indigo-400 animate-bounce';
-  toast.innerHTML = `
-    <i class="fa-solid fa-bell text-amber-300"></i>
-    <span class="text-sm font-semibold">${message}</span>
-  `;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 5000);
-}
-
-// 3. Update Vendor Accept Action to trigger cross-tab notification
-function acceptJobByVendor(orderId) {
-  const activeOrder = JSON.parse(localStorage.getItem('quickfix_active_order')) || {};
-  activeOrder.status = 'Partner Assigned';
-  activeOrder.partnerName = 'Vikram Sharma';
-  activeOrder.partnerPhone = '+91 98765 43210';
-  
-  // Save updated order and trigger storage event
-  localStorage.setItem('quickfix_active_order', JSON.stringify(activeOrder));
-  localStorage.setItem('quickfix_job_accepted', JSON.stringify({
-    orderId: orderId,
-    timestamp: new Date().getTime(),
-    partnerName: 'Vikram Sharma'
-  }));
-
-  alert('Job Accepted! Navigating to active job verification...');
-  renderVendorDashboard();
-}
